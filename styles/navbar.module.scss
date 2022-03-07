@@ -1,0 +1,26 @@
+@import "./variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 6vh;
+
+    font-size: 2rem;
+    font-weight: bold;
+
+    padding: 0 20px;
+
+    background-color: $navbar_background;
+}
+
+.brand {
+    color: white;
+}
+
+.user {
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+}
