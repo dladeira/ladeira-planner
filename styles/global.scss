@@ -14,11 +14,11 @@ body {
     font-family: 'Ubuntu', sans-serif;
 
     background-color: $global_background;
-    color: white;
+    color: black;
 }
 
 #__next {
-    height: calc(100% - 6vh);
+    height: 100%;
 }
 
 * {
