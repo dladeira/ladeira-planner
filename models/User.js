@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
     tasks: {
         type: Array,
         default: []
+    },
+    days: {
+        type: Array,
+        default: []
     }
 })
 
