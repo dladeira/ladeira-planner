@@ -1,0 +1,122 @@
+@import './variables.scss';
+
+.a {
+    color: black;
+}
+
+.weekDays {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.weekDay {
+    width: 13%;
+
+    box-sizing: border-box;
+
+    &Title {
+        width: 100%;
+
+        margin-bottom: 20px;
+        padding: 20px;
+
+        font-size: 2.1rem;
+        text-align: center;
+        background-color: $day_background;
+        color: $day_text_color;
+    }
+
+    &Tasks {
+        width: 100%;
+
+        padding: 10px;
+
+        background-color: $day_background;
+    }
+
+    &AddNew {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+
+        height: 150px;
+
+        margin-top: 20px;
+        padding: 10px;
+
+        background-color: $day_background;
+    }
+}
+
+.task {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0;
+    padding: 30px;
+
+    border-radius: 5px;
+    
+    color: white;
+
+    &Time {
+        font-size: 1rem;
+    }
+
+    &Name {
+        font-size: 2rem;
+    }
+
+    box-sizing: content-box;
+}
+
+.addNew {
+    &Time {
+        width: 90%;
+
+        border: none;
+        border-radius: 6px;
+        outline: none;
+        
+        font-size: 1rem;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.508);
+    }
+
+    &Task {
+        width: 90%;
+
+        border: none;
+        border-radius: 6px;
+        outline: none;
+
+        font-size: 1.6rem;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.508);
+    }
+
+    &Submit {
+        width: 90%;
+
+        padding: 2px 7px;
+
+        border: none;
+        border-radius: 3px;
+        outline: none;
+
+        font-size: 1rem;
+        background-color: rgb(87, 221, 87);
+        color: white;
+    }
+
+    &Submit:hover {
+        background-color: rgb(48, 204, 48);
+
+        cursor: pointer;
+    }
+}

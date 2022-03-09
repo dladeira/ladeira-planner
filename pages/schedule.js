@@ -1,6 +1,8 @@
 import { useUser } from '../lib/hooks'
 import { useState, useEffect } from 'react'
 
+import styles from '../styles/schedule.module.scss'
+
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
 
@@ -32,7 +34,6 @@ Date.prototype.getWeek = function (dowOffset) {
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
     var [tasks, setTasks] = useState()
-    var currentWeek = new Date().getWeek()
 
     function submitNewTask(e) {
         e.preventDefault()
@@ -56,30 +57,74 @@ function Page() {
         })
     }
 
+    useEffect(() => {
+        if (user) {
+            setTasks(user.tasks)
+        }
+    }, [user])
+
+    return (user && tasks ? (
+        <div>
+            {tasks.map(task => (
+                <div style={{ color: task.color }}>
+                    {task.name}
+                </div>
+            ))}
+            <div>WEEK {currentWeek}</div>
+
+            <div className={styles.weekDays}>
+                {weekDays.map(weekDay =>
+                    <WeekDay weekDay={weekDay} user={user} currentWeek={currentWeek} />
+                )}
+            </div>
+
+            <form onSubmit={submitNewTask}>
+                <input name="name" type="text" placeholder="new task name" />
+                <input name="color" type="color" />
+                <button type="submit">ADD NEW TASK</button>
+            </form>
+        </div>
+    ) : <div />)
+}
+
+var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+var currentWeek = new Date().getWeek()
+
+function WeekDay({ weekDay, user, currentWeek }) {
+    var [time, setTime] = useState(1)
+    var index = weekDays.indexOf(weekDay)
+    var dayIndexInUser
+
+    var userDay
+    for (var i = 0; i < user.days.length; i++) {
+        var day = user.days[i]
+        if (day) {
+            if (day.week == currentWeek && day.day == index) {
+                dayIndexInUser = i
+                userDay = user.days[i]
+                break
+            }
+        }
+    }
+
+    if (!userDay) {
+        userDay = { week: currentWeek, day: index, tasks: [] }
+    }
+
     function addTaskToDay(dayNum, dayIndex, e) {
         e.preventDefault()
 
         var newDays = user.days
 
-        var taskName
-        for (var i = 0; i < user.tasks.length; i++) {
-            if (user.tasks[i].id == e.target.taskId.value)
-                taskName = user.tasks[i].name
-        }
-
-        console.log(dayIndex)
-
         if (dayIndex != undefined) {
-            console.log("pushing")
             newDays[dayIndex].tasks.push({
-                name: taskName,
+                taskId: e.target.taskId.value,
                 time: e.target.time.value
             })
         } else {
-            console.log("not pushing")
             var newTasks = []
             newTasks.push({
-                name: taskName,
+                taskId: e.target.taskId.value,
                 time: e.target.time.value
             })
 
@@ -101,74 +146,37 @@ function Page() {
         })
     }
 
-    var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    return (
+        <div className={styles.weekDay}>
+            <div className={styles.weekDayTitle}>{weekDay}</div>
 
-    useEffect(() => {
-        if (user) {
-            setTasks(user.tasks)
-        }
-    }, [user])
-
-    return (user && tasks ? (
-        <div>
-            {tasks.map(task => (
-                <div style={{ color: task.color }}>
-                    {task.name}
-                </div>
-            ))}
-            <div>WEEK {currentWeek}</div>
-            {weekDays.map(weekDay => {
-                var index = weekDays.indexOf(weekDay)
-                var dayIndexInUser
-
-                var userDay
-                for (var i = 0; i < user.days.length; i++) {
-                    var day = user.days[i]
-                    if (day) {
-                        if (day.week == currentWeek && day.day == index) {
-                            dayIndexInUser = i
-                            userDay = user.days[i]
-                            break
-                        }
-                    }
-                }
-
-                if (!userDay) {
-                    userDay = { week: currentWeek, day: index, tasks: [] }
-                }
-
-                return (
-                    <div>
-                        {weekDay} - {userDay.tasks.map(task => {
-                            return <span>| {task.name} - {task.time}|</span>
-                        })}
-
-                        <br />
-                        <br />
-
-                        ADD NEW TASK:
-                        <form onSubmit={e => addTaskToDay(index, dayIndexInUser, e)}>
-                            <select name="taskId">
-                                {user.tasks.map(task => {
-                                    return <option value={task.id}>{task.name}</option>
-                                })}
-                            </select>
-                            <input type="number" name="time" />
-                            <button type="submit">SUBMIT</button>
-                        </form>
-
-                        <br />
+            <div className={styles.weekDayTasks}>
+                {userDay.tasks.map(task =>
+                    <div className={styles.task} style={{ height: task.time * 40, backgroundColor: getTask(task.taskId, user).color }}>
+                        <div className={styles.taskTime}>{task.time}h</div>
+                        <div className={styles.taskName}>{getTask(task.taskId, user).name}</div>
                     </div>
-                )
-            })}
+                )}
+            </div>
 
-            <form onSubmit={submitNewTask}>
-                <input name="name" type="text" placeholder="new task name" />
-                <input name="color" type="color" />
-                <button type="submit">ADD NEW TASK</button>
+            <form className={styles.weekDayAddNew} onSubmit={e => addTaskToDay(index, dayIndexInUser, e)}>
+                <input className={styles.addNewTime} type="text" step="any" value={time} onChange={e => setTime(isNaN(e.target.value) ? time : e.target.value)} name="time" />
+                <select className={styles.addNewTask} name="taskId">
+                    {user.tasks.map(task => {
+                        return <option value={task.id}>{task.name}</option>
+                    })}
+                </select>
+                <button className={styles.addNewSubmit} type="submit">SUBMIT</button>
             </form>
         </div>
-    ) : <div />)
+    )
+}
+
+function getTask(id, user) {
+    for (var i = 0; i < user.tasks.length; i++) {
+        if (user.tasks[i].id == id)
+            return user.tasks[i]
+    }
 }
 
 function generateRandomString(length) {
