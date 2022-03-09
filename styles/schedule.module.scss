@@ -52,13 +52,14 @@
 }
 
 .task {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     margin: 10px 0;
-    padding: 30px;
+    padding: 40px;
 
     border-radius: 5px;
     
@@ -66,10 +67,33 @@
 
     &Time {
         font-size: 1rem;
+        user-select: none;
     }
 
     &Name {
         font-size: 2rem;
+        user-select: none;
+    }
+
+    &Bottom {
+        position: absolute;
+        bottom: 0px;
+
+        height: 16px;
+        width: 100%;
+
+        background-color: rgba(128, 128, 128, 0.145);
+
+        &:hover {
+            background-color: rgba(92, 92, 92, 0.138);
+
+            cursor: pointer;
+        }
+    }
+
+    &Top {
+        @extend .taskBottom;
+        top: 0px;
     }
 
     box-sizing: content-box;

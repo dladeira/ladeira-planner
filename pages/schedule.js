@@ -63,6 +63,10 @@ function Page() {
         }
     }, [user])
 
+    function handleResize() {
+        console.log("resizing")
+    }
+
     return (user && tasks ? (
         <div>
             {tasks.map(task => (
@@ -92,24 +96,29 @@ var currentWeek = new Date().getWeek()
 
 function WeekDay({ weekDay, user, currentWeek }) {
     var [time, setTime] = useState(1)
+    var [tasks, setTasks] = useState([])
     var index = weekDays.indexOf(weekDay)
-    var dayIndexInUser
+    var [dayIndexInUser, setDayIndexInUser] = useState()
+    var [userDay, setUserDay] = useState({})
 
-    var userDay
-    for (var i = 0; i < user.days.length; i++) {
-        var day = user.days[i]
-        if (day) {
-            if (day.week == currentWeek && day.day == index) {
-                dayIndexInUser = i
-                userDay = user.days[i]
-                break
+    useEffect(() => {
+        for (var i = 0; i < user.days.length; i++) {
+            var day = user.days[i]
+            if (day) {
+                if (day.week == currentWeek && day.day == index) {
+                    setDayIndexInUser(i)
+                    setUserDay(user.days[i])
+                    setTasks(user.days[i].tasks)
+                    break
+                }
             }
         }
-    }
 
-    if (!userDay) {
-        userDay = { week: currentWeek, day: index, tasks: [] }
-    }
+        if (!userDay) {
+            setUserDay({ week: currentWeek, day: index, tasks: [] })
+        }
+    }, [])
+
 
     function addTaskToDay(dayNum, dayIndex, e) {
         e.preventDefault()
@@ -136,6 +145,33 @@ function WeekDay({ weekDay, user, currentWeek }) {
         }
 
         user.days = [...newDays]
+        setTasks([...user.days[dayIndexInUser].tasks])
+
+        fetch(window.origin + "/api/days", {
+            body: JSON.stringify({
+                email: user.email,
+                days: user.days
+            }),
+            method: "POST"
+        })
+    }
+
+    function increaseTaskTime(taskId, amount) {
+        var newDays = user.days
+
+        var taskIndex;
+        for (var taskI in user.days[dayIndexInUser].tasks) {
+            if (user.days[dayIndexInUser].tasks[taskI].taskId == taskId) {
+                taskIndex = taskI
+            }
+        }
+
+        newDays[dayIndexInUser].tasks[taskIndex].time = parseFloat(newDays[dayIndexInUser].tasks[taskIndex].time) + amount
+        if (newDays[dayIndexInUser].tasks[taskIndex].time <= 0) {
+            newDays[dayIndexInUser].tasks.splice(taskIndex, 1)
+        }
+        user.days = newDays
+        setTasks([...user.days[dayIndexInUser].tasks])
 
         fetch(window.origin + "/api/days", {
             body: JSON.stringify({
@@ -151,19 +187,25 @@ function WeekDay({ weekDay, user, currentWeek }) {
             <div className={styles.weekDayTitle}>{weekDay}</div>
 
             <div className={styles.weekDayTasks}>
-                {userDay.tasks.map(task =>
-                    <div className={styles.task} style={{ height: task.time * 40, backgroundColor: getTask(task.taskId, user).color }}>
-                        <div className={styles.taskTime}>{task.time}h</div>
-                        <div className={styles.taskName}>{getTask(task.taskId, user).name}</div>
-                    </div>
-                )}
+                {tasks.map(task => {
+                    if (task)
+                        return (
+                            <div className={styles.task} style={{ height: task.time * 40, backgroundColor: getTask(task.taskId, user).color }}>
+                                <div onClick={e => increaseTaskTime(task.taskId, -0.25)} className={styles.taskTop}></div>
+                                <div className={styles.taskTime}>{task.time}h</div>
+                                <div className={styles.taskName}>{getTask(task.taskId, user).name}</div>
+                                <div onClick={e => increaseTaskTime(task.taskId, 0.25)} className={styles.taskBottom}></div>
+                            </div>
+                        )
+                })}
             </div>
 
             <form className={styles.weekDayAddNew} onSubmit={e => addTaskToDay(index, dayIndexInUser, e)}>
                 <input className={styles.addNewTime} type="text" step="any" value={time} onChange={e => setTime(isNaN(e.target.value) ? time : e.target.value)} name="time" />
                 <select className={styles.addNewTask} name="taskId">
                     {user.tasks.map(task => {
-                        return <option value={task.id}>{task.name}</option>
+                        if (dayIndexInUser == undefined || user.days[dayIndexInUser].tasks.filter(i => i.taskId == task.id).length == 0)
+                            return <option value={task.id}>{task.name}</option>
                     })}
                 </select>
                 <button className={styles.addNewSubmit} type="submit">SUBMIT</button>
