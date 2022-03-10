@@ -63,10 +63,6 @@ function Page() {
         }
     }, [user])
 
-    function handleResize() {
-        console.log("resizing")
-    }
-
     return (user && tasks ? (
         <div>
             {tasks.map(task => (
@@ -142,10 +138,14 @@ function WeekDay({ weekDay, user, currentWeek }) {
                 day: dayNum,
                 tasks: newTasks
             })
+
+            setDayIndexInUser(newDays.length - 1)
+            dayIndex = newDays.length - 1
         }
 
         user.days = [...newDays]
-        setTasks([...user.days[dayIndexInUser].tasks])
+
+        setTasks([...user.days[dayIndex].tasks])
 
         fetch(window.origin + "/api/days", {
             body: JSON.stringify({
@@ -171,6 +171,7 @@ function WeekDay({ weekDay, user, currentWeek }) {
             newDays[dayIndexInUser].tasks.splice(taskIndex, 1)
         }
         user.days = newDays
+
         setTasks([...user.days[dayIndexInUser].tasks])
 
         fetch(window.origin + "/api/days", {
