@@ -3,6 +3,8 @@ import dbConnect from '../../lib/dbConnect'
 import User from '../../models/User'
 
 export default async function user(req, res) {
+    await dbConnect();
+    
     try {
         const session = await getLoginSession(req)
         const user = (session && (await findUser({ _id: session._doc._id}))) ?? null
@@ -16,7 +18,6 @@ export default async function user(req, res) {
 }
 
 async function findUser(data) {
-    await dbConnect();
     const userFound = await User.findOne(data)
     return userFound
 }
