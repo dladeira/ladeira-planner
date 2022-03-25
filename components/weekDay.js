@@ -1,28 +1,31 @@
 import { useState, useEffect } from 'react'
 
-import styles from '../styles/schedule.module.scss'
+import styles from '../styles/weekDay.module.scss'
 
-function WeekDay({ weekDay, weekDayIndex, user, currentWeek }) {
+function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
     var [taskInputTime, setTaskInputTime] = useState(1)
     var [dayIndex, setDayIndex] = useState()
     var [tasks, setTasks] = useState([])
 
     useEffect(() => {
+        console.log("updaing things cause week changed")
         for (var i = 0; i < user.days.length; i++) {
             var day = user.days[i]
             if (day) {
                 if (day.week == currentWeek && day.day == weekDayIndex) {
                     setDayIndex(i)
                     setTasks(user.days[i].tasks)
-                    break
+                    console.log("setting tasks to cool")
+                    return
                 }
             }
         }
 
-        if (!day) {
-            setTasks([])
-        }
-    }, [])
+        console.log('setting tasks to nothing')
+        setTasks([])
+        setDayIndex(undefined)
+        console.log(tasks)
+    }, [currentWeek])
 
 
     function addTaskToDay(e) {
@@ -34,7 +37,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek }) {
         if (dayIndex != undefined) {
             newDays[dayIndex].tasks.push({
                 taskId: e.target.taskId.value,
-                time: e.target.time.value
+                time: 1
             })
         } else {
             newDays.push({
@@ -42,7 +45,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek }) {
                 day: weekDayIndex,
                 tasks: [{
                     taskId: e.target.taskId.value,
-                    time: e.target.time.value
+                    time: 1
                 }]
             })
 
@@ -66,8 +69,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek }) {
     return (
 
         <div className={styles.weekDay}>
-            <div className={styles.weekDayTitle}>{weekDay}</div>
-
+            <div className={today ? styles.weekDayTitleToday : styles.weekDayTitle}>{weekDay}</div>
             <div className={styles.weekDayTasks}>
                 {tasks.map(task => {
                     if (task)
@@ -76,7 +78,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek }) {
             </div>
 
             <form className={styles.weekDayAddNew} onSubmit={addTaskToDay}>
-                <input className={styles.addNewTime} type="text" step="any" value={taskInputTime} onChange={e => setTaskInputTime(isNaN(e.target.value) ? taskInputTime : e.target.value)} name="time" />
+
                 <select className={styles.addNewTask} name="taskId">
                     {user.tasks.map(task => {
                         if (dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0)

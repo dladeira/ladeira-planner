@@ -1,146 +1,78 @@
-@import './variables.scss';
-
-.a {
-    color: black;
-}
+@import "./variables.scss";
 
 .weekDays {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: flex-start;
+
+    width: 95%;
+
+    margin: 0 auto;
 }
 
-.weekDay {
-    width: 13%;
+.weekNumber {
+    &Container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
-    box-sizing: border-box;
+        width: 95%;
 
-    &Title {
-        width: 100%;
+        margin: 20px auto;
 
-        margin-bottom: 20px;
-        padding: 20px;
-
-        font-size: 2.1rem;
+        font-weight: 500;
+        font-size: 2rem;
         text-align: center;
-        background-color: $day_background;
         color: $day_text_color;
     }
 
-    &Tasks {
-        width: 100%;
-
-        padding: 10px;
-
-        background-color: $day_background;
-    }
-
-    &AddNew {
+    &Bar {
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: center;
         align-items: center;
 
-        height: 150px;
-
-        margin-top: 20px;
-        padding: 10px;
+        height: 3rem;
 
         background-color: $day_background;
     }
-}
 
-.task {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    &Text {
+        @extend .weekNumberBar;
 
-    margin: 10px 0;
-    padding: 40px;
-
-    border-radius: 5px;
-    
-    color: white;
-
-    &Time {
-        font-size: 1rem;
-        user-select: none;
-    }
-
-    &Name {
-        font-size: 2rem;
-        user-select: none;
-    }
-
-    &Bottom {
-        position: absolute;
-        bottom: 0px;
-
-        height: 16px;
         width: 100%;
+    }
 
-        background-color: rgba(128, 128, 128, 0.145);
+    &Arrow {
+        @extend .weekNumberBar;
+
+        &Left {
+            @extend .weekNumberArrow;
+            margin-right: 20px;
+        }
+
+        &Right {
+            @extend .weekNumberArrow;
+            margin-left: 20px;
+        }
+
+        &Text {
+            height: fit-content;
+            width: fit-content;
+
+            margin-bottom: 5px;
+
+            font-size: 3rem;
+        }
 
         &:hover {
-            background-color: rgba(92, 92, 92, 0.138);
+            color: rgb(90, 90, 90);
 
             cursor: pointer;
         }
-    }
 
-    &Top {
-        @extend .taskBottom;
-        top: 0px;
-    }
-
-    box-sizing: content-box;
-}
-
-.addNew {
-    &Time {
-        width: 90%;
-
-        border: none;
-        border-radius: 6px;
-        outline: none;
-        
-        font-size: 1rem;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.508);
-    }
-
-    &Task {
-        width: 90%;
-
-        border: none;
-        border-radius: 6px;
-        outline: none;
-
-        font-size: 1.6rem;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.508);
-    }
-
-    &Submit {
-        width: 90%;
-
-        padding: 2px 7px;
-
-        border: none;
-        border-radius: 3px;
-        outline: none;
-
-        font-size: 1rem;
-        background-color: rgb(87, 221, 87);
-        color: white;
-    }
-
-    &Submit:hover {
-        background-color: rgb(48, 204, 48);
-
-        cursor: pointer;
+        width: 80px;
     }
 }
