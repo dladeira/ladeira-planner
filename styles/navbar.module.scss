@@ -11,12 +11,65 @@
     font-size: 2rem;
     font-weight: bold;
 
-    padding: 0 20px;
+    padding: 0 10px;
 
     background-color: $navbar_background;
     color: white;
 }
 
-.user {
-    font-size: 1rem;
+.itemContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    width: 30%;
+}
+
+.itemLink {
+    margin: 0 20px;
+
+    font-weight: 500;
+    font-size: 1.4rem;
+    color: rgb(255, 255, 255);
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.link {
+    &Container {
+        @extend .itemContainer;
+
+        justify-content: flex-start;
+    }
+
+    &Schedule {
+        @extend .itemLink;
+    }
+
+    &Tasks {
+        @extend .itemLink;
+    }
+}
+
+.brand {
+    &Container {
+        @extend .itemContainer;
+    }
+
+    font-weight: lighter;
+    font-size: 2.7rem;
+}
+
+.auth {
+    &Container {
+        @extend .itemContainer;
+
+        justify-content: flex-end;
+    }
+
+    &Login {
+        @extend .itemLink;
+    }
 }

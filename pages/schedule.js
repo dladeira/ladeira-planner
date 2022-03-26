@@ -19,7 +19,7 @@ function Page() {
     }, [user])
 
     return (user && tasks ? (
-        <div>
+        <div className={styles.container}>
             <div className={styles.weekNumberContainer}>
                 <div className={styles.weekNumberArrowLeft} onClick={e => { setCurrentWeek(currentWeek - 1) }}><div className={styles.weekNumberArrowText}>{"<"}</div></div>
                 <div className={styles.weekNumberText}>WEEK {currentWeek}</div>

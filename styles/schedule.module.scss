@@ -1,14 +1,11 @@
 @import "./variables.scss";
 
-.weekDays {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
+.container {
+    position: relative;
 
-    width: 95%;
+    height: calc(100% - 6vh);
 
-    margin: 0 auto;
+    padding-top: 20px;
 }
 
 .weekNumber {
@@ -18,9 +15,10 @@
         justify-content: space-between;
         align-items: center;
 
+        height: 3rem;
         width: 95%;
 
-        margin: 20px auto;
+        margin: 0 auto;
 
         font-weight: 500;
         font-size: 2rem;
@@ -75,4 +73,16 @@
 
         width: 80px;
     }
+}
+
+.weekDays {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    height: calc(100% - 3rem);
+    width: 95%;
+
+    margin: 0 auto;
 }

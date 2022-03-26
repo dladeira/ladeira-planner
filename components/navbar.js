@@ -7,27 +7,38 @@ function Component() {
     const user = useUser()
 
     return (
-        <div className={styles.container}>
-            <NavLink href={"/"}>
-                <div className={styles.brand}>
-                    Planner
-                </div>
-            </NavLink>
-            {user ? <div className={styles.user}>{user.email}</div> : ""}
-            <NavLink href={user ? "/api/logout" : "/api/login"}>
-                <div className={styles.authentication}>
-                    {user ? "LOGOUT" : "LOGIN"}
-                </div>
-            </NavLink>
-        </div>
-    )
-}
+        <div className={styles.container} >
 
-function NavLink({ children, href }) {
-    return (
-        <Link href={href}>
-            <a className={styles.navLink}>{children}</a>
-        </Link>
+            {user ? (
+                <div className={styles.linkContainer}>
+                    <Link href={"/schedule"}>
+                        <a className={styles.linkSchedule} draggable="false">
+                            Schedule
+                        </a>
+                    </Link>
+                    <Link href={"/tasks"}>
+                        <a className={styles.linkTasks} draggable="false">
+                            Tasks
+                        </a>
+                    </Link>
+                </div>
+            ) : <div className={styles.linkContainer} />
+            }
+            <div className={styles.brandContainer}>
+                <Link href={"/"}>
+                    <a className={styles.brand} draggable="false">
+                        Planner
+                    </a>
+                </Link>
+            </div>
+            <div className={styles.authContainer}>
+                <Link href={user ? "/api/logout" : "/api/login"}>
+                    <a className={styles.authLogin} draggable="false">
+                        {user ? "LOGOUT" : "LOGIN"}
+                    </a>
+                </Link>
+            </div>
+        </div >
     )
 }
 
