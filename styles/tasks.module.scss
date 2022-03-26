@@ -1,0 +1,167 @@
+@import "./variables.scss";
+
+.tasks {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+}
+
+.task {
+    &Container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        height: 300px;
+        width: 500px;
+
+        margin: 20px;
+        padding: 20px;
+
+        color: white;
+
+        border-radius: 5px;
+    }
+
+    &Title {
+        font-size: 2.6rem;
+    }
+
+    &Hours {
+        margin-top: 4px;
+
+        font-size: 1.3rem;
+    }
+}
+
+.editLink {
+    display: block;
+
+    width: 92%;
+
+    margin: 30px auto;
+    padding: 10px;
+
+    border-radius: 5px;
+
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    color: $day_text_color;
+
+    opacity: 0.8;
+
+    background-color: $day_background;
+        &:hover {
+            cursor: pointer;
+
+            background-color: darken($day_background, 3)
+        }
+}
+
+.edits {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-top: 20px;
+}
+
+.edit {
+    &Container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        width: 90%;
+
+        margin: 5px 0;
+        padding: 10px;
+
+        background-color: $day_background;
+    }
+
+    &Title {
+        padding: 10px;
+
+        border: none;
+
+        font-size: 2rem;
+        background-color: rgba(255, 255, 255, 0.713);
+
+        &:focus {
+            background-color: rgb(255, 255, 255);
+        }
+    }
+
+    &Color {
+        height: 66px;
+
+        margin-left: 20px;
+        padding: 5px;
+    }
+
+    &Button {
+        height: 66px;
+        width: 66px;
+
+        margin-left: 20px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &Save {
+        @extend .editButton;
+    }
+
+    &Delete {
+        @extend .editButton;
+    }
+
+    &Changed {
+        background-color: darken($day_background, 10);
+    }
+}
+
+.newEdit {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 90%;
+
+    margin: 5px auto;
+    padding: 10px;
+
+    background-color: $day_background;
+
+    &Submit {
+        height: 4rem;
+        width: 50%;
+
+        margin: 0 auto;
+
+        border: none;
+        border-radius: 5px;
+
+        font-size: 2rem;
+        background-color: #8ac52a;
+        color: white;
+
+        &:hover {
+            background-color: darken(#8ac52a, 2);
+
+            cursor: pointer;
+        }
+    }
+}
