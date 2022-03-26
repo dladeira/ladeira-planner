@@ -68,8 +68,11 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
             <div className={today ? styles.weekDayTitleToday : styles.weekDayTitle}>{weekDay}</div>
             <div className={styles.weekDayTasks}>
                 {tasks.map(task => {
-                    if (task)
-                        return <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
+                    if (task) {
+                        return <div>
+                            <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
+                            </div>
+                    }
                 })}
             </div>
 
@@ -77,7 +80,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
 
                 <select className={styles.addNewTask} name="taskId">
                     {user.tasks.filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
-                            return <option value={task.id}>{task.name}</option>
+                        return <option value={task.id}>{task.name}</option>
                     })}
                 </select>
                 <button className={canAddNewTask() ? styles.addNewSubmit : styles.addNewSubmitDisabled} type="submit" disabled={!canAddNewTask()}>SUBMIT</button>
@@ -91,7 +94,7 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     var pageY = -1
     var diff = 0
     var height = defaultTask.time * 40
-    var elementId = defaultTask.id + "-" + user.days[dayIndexInUser].day + "-" + user.days[dayIndexInUser].week
+    var elementId = defaultTask.taskId + "-" + user.days[dayIndexInUser].day + "-" + user.days[dayIndexInUser].week
 
     function increaseTaskTime(amount) {
         var newTasks = user.days[dayIndexInUser].tasks
