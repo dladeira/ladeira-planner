@@ -70,7 +70,7 @@
     align-items: center;
 
     margin: 10px 0;
-    padding: 40px;
+    padding: 40px 0;
 
     border-radius: 5px;
 
@@ -82,7 +82,9 @@
     }
 
     &Name {
-        font-size: 2rem;
+        font-size: 1.7rem;
+        text-align: center;
+
         user-select: none;
     }
 
