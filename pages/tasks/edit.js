@@ -28,7 +28,7 @@ function Page() {
         fetch(window.origin + "/api/tasks", {
             body: JSON.stringify({
                 email: user.email,
-                tasks: user.tasks
+                tasks: newTasks
             }),
             method: "POST"
         })
