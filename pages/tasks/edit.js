@@ -65,8 +65,7 @@ function Task({ task, user, tasks, setTasks }) {
 
         var newTasks = [...tasks]
         var taskIndex
-        for (var i = 0; i < newTasks; i++) {
-            console.log(tasks[i].id)
+        for (var i = 0; i < newTasks.length; i++) {
             if (newTasks[i].id == task.id) {
                 taskIndex = i
                 break;

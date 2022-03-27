@@ -9,8 +9,9 @@ var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturda
 
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
+    var date = new Date()
     const [tasks, setTasks] = useState()
-    const [currentWeek, setCurrentWeek] = useState(getCurrentWeek())
+    const [selectedWeek, setSelectedWeek] = useState(date.getCurrentWeek())
 
     useEffect(() => {
         if (user) {
@@ -21,47 +22,49 @@ function Page() {
     return (user && tasks ? (
         <div className={styles.container}>
             <div className={styles.weekNumberContainer}>
-                <div className={styles.weekNumberArrowLeft} onClick={e => { setCurrentWeek(currentWeek - 1) }}><div className={styles.weekNumberArrowText}>{"<"}</div></div>
-                <div className={styles.weekNumberText}>WEEK {currentWeek}</div>
-                <div className={styles.weekNumberArrowRight} onClick={e => { setCurrentWeek(currentWeek + 1) }}><div className={styles.weekNumberArrowText}>{">"}</div></div>
+                <div className={styles.weekNumberArrowLeft} onClick={e => { setSelectedWeek(selectedWeek - 1) }}><div className={styles.weekNumberArrowText}>{"<"}</div></div>
+                <div className={styles.weekNumberText}>WEEK {selectedWeek}</div>
+                <div className={styles.weekNumberArrowRight} onClick={e => { setSelectedWeek(selectedWeek + 1) }}><div className={styles.weekNumberArrowText}>{">"}</div></div>
             </div>
 
             <div className={styles.weekDays}>
                 {weekDays.map(weekDay =>
-                    <WeekDay weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={getCurrentWeek() == currentWeek && weekDays.indexOf(weekDay) == new Date().getDay()} currentWeek={currentWeek} />
+                    <WeekDay weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == selectedWeek && weekDays.indexOf(weekDay) == date.getWeekDay()} currentWeek={selectedWeek} />
                 )}
             </div>
         </div>
     ) : <div />)
 }
 
-function getCurrentWeek() {
-    /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
-    var date = new Date()
+Date.prototype.getCurrentWeek = () => {
+    var date = new Date();
 
-    var dowOffset = 0; //default dowOffset to zero
-    var newYear = new Date(date.getFullYear(), 0, 1);
-    var day = newYear.getDay() - dowOffset; //the day of week the year begins on
-    day = (day >= 0 ? day : day + 7);
-    var daynum = Math.floor((date.getTime() - newYear.getTime() -
-        (date.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) / 86400000) + 1;
-    var weeknum;
-    //if the year starts before the middle of a week
-    if (day < 4) {
-        weeknum = Math.floor((daynum + day - 1) / 7) + 1;
-        if (weeknum > 52) {
-            nYear = new Date(this.getFullYear() + 1, 0, 1);
-            nday = nYear.getDay() - dowOffset;
-            nday = nday >= 0 ? nday : nday + 7;
-            /*if the next year starts before the middle of
-              the week, it is week #1 of that year*/
-            weeknum = nday < 4 ? 1 : 53;
-        }
+    // ISO week date weeks start on Monday, so correct the day number
+    var nDay = (date.getDay() + 6) % 7;
+
+    // ISO 8601 states that week 1 is the week with the first Thursday of that year
+    // Set the target date to the Thursday in the target week
+    date.setDate(date.getDate() - nDay + 3);
+
+    // Store the millisecond value of the target date
+    var n1stThursday = date.valueOf();
+
+    // Set the target to the first Thursday of the year
+    // First, set the target to January 1st
+    date.setMonth(0, 1);
+
+    // Not a Thursday? Correct the date to the next Thursday
+    if (date.getDay() !== 4) {
+        date.setMonth(0, 1 + ((4 - date.getDay()) + 7) % 7);
     }
-    else {
-        weeknum = Math.floor((daynum + day - 1) / 7);
-    }
-    return weeknum;
-};
+
+    // The week number is the number of weeks between the first Thursday of the year
+    // and the Thursday in the target week (604800000 = 7 * 24 * 3600 * 1000)
+    return 1 + Math.ceil((n1stThursday - date) / 604800000);
+}
+
+Date.prototype.getWeekDay = () => {
+    return new Date().getDay() - 1 < 0 ? 6 : new Date().getDay()
+}
 
 export default Page

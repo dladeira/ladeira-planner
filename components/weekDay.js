@@ -62,12 +62,20 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
         return user.tasks.filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).length > 0
     }
 
+    function getSortedTasks() {
+        var sorted = tasks.sort((a, b) => getTask(a.taskId, user).name.localeCompare(getTask(b.taskId, user).name))
+
+        return sorted
+    }
+
+    console.log(getSortedTasks())
+
     return (
 
         <div className={styles.weekDay}>
             <div className={today ? styles.weekDayTitleToday : styles.weekDayTitle}>{weekDay}</div>
             <div className={styles.weekDayTasks}>
-                {tasks.map(task => {
+                {getSortedTasks().map(task => {
                     if (task) {
                         return <div>
                             <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
