@@ -62,8 +62,14 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
         return user.tasks.filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).length > 0
     }
 
-    function getSortedTasks() {
+    function getSortedRecordedTasks() {
         var sorted = tasks.sort((a, b) => getTask(a.taskId, user).name.localeCompare(getTask(b.taskId, user).name))
+
+        return sorted
+    }
+
+    function getSortedTasks() {
+        var sorted = user.tasks.sort((a, b) => a.name.localeCompare(b.name))
 
         return sorted
     }
@@ -73,7 +79,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
         <div className={styles.weekDay}>
             <div className={today ? styles.weekDayTitleToday : styles.weekDayTitle}>{weekDay}</div>
             <div className={styles.weekDayTasks}>
-                {getSortedTasks().map(task => {
+                {getSortedRecordedTasks().map(task => {
                     if (task) {
                         return <div>
                             <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
@@ -85,7 +91,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
             <form className={styles.weekDayAddNew} onSubmit={addTaskToDay}>
 
                 <select className={styles.addNewTask} name="taskId">
-                    {user.tasks.filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
+                    {getSortedTasks().filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
                         return <option value={task.id}>{task.name}</option>
                     })}
                 </select>
