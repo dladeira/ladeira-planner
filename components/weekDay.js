@@ -68,8 +68,6 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
         return sorted
     }
 
-    console.log(getSortedTasks())
-
     return (
 
         <div className={styles.weekDay}>

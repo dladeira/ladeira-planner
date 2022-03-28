@@ -13,6 +13,12 @@ function Page() {
         }
     }, [user])
 
+    function getSortedTasks() {
+        var sorted = tasks.sort((a, b) => getTask(a.id, user).name.localeCompare(getTask(b.id, user).name))
+
+        return sorted
+    }
+
     function submitNewTask(e) {
         e.preventDefault()
 
@@ -37,7 +43,7 @@ function Page() {
     return (user && tasks ? (
         <div>
             <div className={styles.edits}>
-                {tasks.map(task => (
+                {getSortedTasks().map(task => (
                     <Task key={task.id} task={task} user={user} tasks={tasks} setTasks={setTasks} />
                 ))}
             </div>
@@ -134,7 +140,6 @@ function generateRandomString(length, user) {
     while (true) {
         var result = '';
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
 
         for (var i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() *
@@ -149,7 +154,13 @@ function generateRandomString(length, user) {
 
         return result;
     }
+}
 
+function getTask(id, user) {
+    for (var i = 0; i < user.tasks.length; i++) {
+        if (user.tasks[i].id == id)
+            return user.tasks[i]
+    }
 }
 
 export default Page

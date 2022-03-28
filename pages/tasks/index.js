@@ -14,10 +14,16 @@ function Page() {
         }
     }, [user])
 
+    function getSortedTasks() {
+        var sorted = tasks.sort((a, b) => getTask(a.id, user).name.localeCompare(getTask(b.id, user).name))
+
+        return sorted
+    }
+
     return (user && tasks ? (
         <div>
             <div className={styles.tasks}>
-                {tasks.map(task => (
+                {getSortedTasks().map(task => (
                     <Task key={task.id} task={task} user={user} />
                 ))}
             </div>
@@ -49,6 +55,13 @@ function getTotalHoursForTask(taskId, user) {
     }
 
     return hours
+}
+
+function getTask(id, user) {
+    for (var i = 0; i < user.tasks.length; i++) {
+        if (user.tasks[i].id == id)
+            return user.tasks[i]
+    }
 }
 
 export default Page
