@@ -88,6 +88,26 @@ function Task({ task, user, tasks, setTasks }) {
 
     async function onDeletePress() {
         var newTasks = [...tasks.filter(currentTask => task.id != currentTask.id)]
+        var newDays = [...user.days]
+
+        for (var dayIndex in newDays) {
+            var day = newDays[dayIndex]
+            for (var taskIndex in day.tasks) {
+                var selectedTask = day.tasks[taskIndex]
+
+                if (task.id == selectedTask.taskId) {
+                    delete newDays[dayIndex].tasks[taskIndex]
+                }
+            }
+        }
+
+        await fetch(window.origin + "/api/days", {
+            body: JSON.stringify({
+                email: user.email,
+                days: newDays
+            }),
+            method: "POST"
+        })
 
         await fetch(window.origin + "/api/tasks", {
             body: JSON.stringify({
@@ -97,7 +117,6 @@ function Task({ task, user, tasks, setTasks }) {
             method: "POST"
         })
 
-        console.log(newTasks)
         setTasks(newTasks)
     }
 

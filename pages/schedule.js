@@ -64,7 +64,7 @@ Date.prototype.getCurrentWeek = () => {
 }
 
 Date.prototype.getWeekDay = () => {
-    return new Date().getDay() - 1 < 0 ? 6 : new Date().getDay()
+    return new Date().getDay() - 1 < 0 ? 6 : new Date().getDay() - 1
 }
 
 export default Page

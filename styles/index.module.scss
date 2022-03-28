@@ -1,0 +1,39 @@
+@import "./variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 60px;
+
+    color: $day_text_color;
+}
+
+.title {
+    font-size: 9rem;
+}
+
+.subtitle {
+    font-size: 3rem;
+}
+
+.email {
+    font-weight: bold;
+}
+
+.enter {
+    margin-top: 400px;
+    padding: 20px 40px;
+
+    border-radius: 20px;
+
+    font-size: 4.5rem;
+    background-color: #66B7FC;
+    color: white;
+
+    &:hover {
+        background-color: darken(#66B7FC, 5);
+    }
+}
