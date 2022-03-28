@@ -2,7 +2,17 @@ import { useState, useEffect } from 'react'
 
 import styles from '../styles/weekDay.module.scss'
 
-function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
+function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear, disabled }) {
+    if (disabled) {
+        return (
+            <div className={styles.weekDay}>
+                <div className={styles.weekDayTitleDisabled}>{weekDay}</div>
+                <div className={styles.weekDayTasksDisabled}>
+                </div>
+            </div>
+        )
+    }
+
     var [dayIndex, setDayIndex] = useState()
     var [tasks, setTasks] = useState([])
 
@@ -10,7 +20,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
         for (var i = 0; i < user.days.length; i++) {
             var day = user.days[i]
             if (day) {
-                if (day.week == currentWeek && day.day == weekDayIndex) {
+                if (day.week == currentWeek && day.day == weekDayIndex && day.currentYear == currentYear) {
                     setDayIndex(i)
                     setTasks(user.days[i].tasks)
                     return
@@ -40,7 +50,8 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
                 tasks: [{
                     taskId: e.target.taskId.value,
                     time: 1
-                }]
+                }],
+                currentYear: currentYear
             })
 
             newDayIndex = newDays.length - 1
@@ -83,7 +94,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today }) {
                     if (task) {
                         return <div>
                             <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
-                            </div>
+                        </div>
                     }
                 })}
             </div>

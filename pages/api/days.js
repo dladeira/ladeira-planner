@@ -9,6 +9,7 @@ async function Route(req, res) {
     user.days = req.body.days
 
     await user.save()
+
     res.status(200).send()
 }
 

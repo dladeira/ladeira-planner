@@ -28,6 +28,13 @@
 
             font-weight: bold;
         }
+
+        &Disabled {
+            @extend .weekDayTitle;
+
+            background-color: lighten($day_background, 3);
+            color: lighten($day_text_color, 30);
+        }
     }
 
     &Tasks {
@@ -43,6 +50,12 @@
 
         &::-webkit-scrollbar {
             display: none;
+        }
+
+        &Disabled {
+            @extend .weekDayTasks;
+
+            background-color: lighten($day_background, 3);
         }
     }
 
