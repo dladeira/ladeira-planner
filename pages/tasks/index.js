@@ -39,7 +39,7 @@ function Task({ task, user }) {
     return (
         <div className={styles.taskContainer} style={{ backgroundColor: task.color }}>
             <div className={styles.taskTitle}>{task.name}</div>
-            <div className={styles.taskHours}>Total Hours: {getTotalHoursForTask(task.id, user)}</div>
+            <div className={styles.taskHours}>Total: {getTotalHoursForTask(task.id, user)}h</div>
         </div>
     )
 }

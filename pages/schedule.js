@@ -107,8 +107,6 @@ function isInYear(year, week, dayIndex) {
     var firstWeekDay = getWeekDay(new Date(year, 0, 1));
     var lastWeekDay = getWeekDay(new Date(year, 11, 31))
 
-    console.log(firstWeekDay)
-
     if ((week == 1 && dayIndex < firstWeekDay) || (week == getWeeksInYear(year) && dayIndex > lastWeekDay))
         return false
     return true

@@ -98,7 +98,6 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
                     }
                 })}
             </div>
-
             <form className={styles.weekDayAddNew} onSubmit={addTaskToDay}>
 
                 <select className={styles.addNewTask} name="taskId">
@@ -106,7 +105,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
                         return <option value={task.id}>{task.name}</option>
                     })}
                 </select>
-                <button className={canAddNewTask() ? styles.addNewSubmit : styles.addNewSubmitDisabled} type="submit" disabled={!canAddNewTask()}>SUBMIT</button>
+                <button className={canAddNewTask() ? styles.addNewSubmit : styles.addNewSubmitDisabled} type="submit" disabled={!canAddNewTask()}>ADD</button>
             </form>
         </div>
     )
@@ -116,7 +115,8 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     var tracking = false
     var pageY = -1
     var diff = 0
-    var height = defaultTask.time * 40
+    var quarterToPixelRatio = 50
+    var height = defaultTask.time * quarterToPixelRatio
     var elementId = defaultTask.taskId + "-" + user.days[dayIndexInUser].day + "-" + user.days[dayIndexInUser].week
 
     function increaseTaskTime(amount) {
@@ -171,7 +171,7 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
 
             tracking = false
             pageY = -1
-            increaseTaskTime(diff / 40)
+            increaseTaskTime(diff / quarterToPixelRatio)
             diff = 0
         }
     }
@@ -182,8 +182,8 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     }
 
     function updateHeight() {
-        document.getElementById(elementId).style.height = ((parseFloat(defaultTask.time) + parseFloat(roundToFourth(diff / 40))) * 40) + "px"
-        document.getElementById(elementId + "_time").innerHTML = roundToFourth((parseFloat(defaultTask.time) + (diff / 40))) > 0 ? roundToFourth((parseFloat(defaultTask.time) + (diff / 40))) + "h" : "REMOVE"
+        document.getElementById(elementId).style.height = ((parseFloat(defaultTask.time) + parseFloat(roundToFourth(diff / quarterToPixelRatio))) * quarterToPixelRatio) + "px"
+        document.getElementById(elementId + "_time").innerHTML = roundToFourth((parseFloat(defaultTask.time) + (diff / quarterToPixelRatio))) > 0 ? roundToFourth((parseFloat(defaultTask.time) + (diff / quarterToPixelRatio))) + "h" : "REMOVE"
     }
 
     return (

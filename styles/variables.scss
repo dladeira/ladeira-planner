@@ -1,5 +1,12 @@
-$global_background: #FFFFFF;
-$navbar_background: #4D9DE0;
+$global_background: #ffffff;
 
-$day_background: #F3F3F3;
-$day_text_color: #7D7D7D;
+$font_color_1: #7D7D7D;
+
+$navbar_color: #FFFFFF;
+$navbar_background: #4D9DE0;
+$navbar_height: 6vh;
+
+// $weekDay_background: #f8f8f8;
+$weekDay_background: #ffffff;
+$weekDay_color: $font_color_1;
+$weekDay_divider: #f8f8f8;

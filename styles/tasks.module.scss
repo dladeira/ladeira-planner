@@ -7,7 +7,9 @@
     align-items: center;
     flex-wrap: wrap;
 
-    margin-top: 20px;
+    width: 90%;
+
+    margin: 80px auto 0 auto;
 }
 
 .task {
@@ -17,25 +19,24 @@
         justify-content: flex-start;
         align-items: flex-start;
 
-        height: 300px;
-        width: 500px;
+        height: 200px;
+        width: 300px;
 
-        margin: 20px;
+        margin: 10px;
         padding: 20px;
 
+        border-radius: 5px;
         color: white;
-
-        border-radius: 20px;
     }
 
     &Title {
-        font-size: 2.6rem;
+        font-size: 1.5rem;
     }
 
     &Hours {
         margin-top: 4px;
 
-        font-size: 1.3rem;
+        font-size: 1rem;
     }
 }
 
@@ -52,15 +53,15 @@
     font-size: 3rem;
     font-weight: bold;
     text-align: center;
-    color: $day_text_color;
+    color: $weekDay_color;
 
     opacity: 0.8;
 
-    background-color: $day_background;
+    background-color: $weekDay_background;
         &:hover {
             cursor: pointer;
 
-            background-color: darken($day_background, 3)
+            background-color: darken($weekDay_background, 3)
         }
 }
 
@@ -85,7 +86,7 @@
         margin: 5px 0;
         padding: 10px;
 
-        background-color: $day_background;
+        background-color: $weekDay_background;
     }
 
     &Title {
@@ -128,7 +129,7 @@
     }
 
     &Changed {
-        background-color: darken($day_background, 10);
+        background-color: darken($weekDay_background, 10);
     }
 }
 
@@ -143,7 +144,7 @@
     margin: 5px auto;
     padding: 10px;
 
-    background-color: $day_background;
+    background-color: $weekDay_background;
 
     &Submit {
         height: 4rem;

@@ -1,4 +1,5 @@
 @import "./variables.scss";
+
 .weekDay {
     display: flex;
     flex-direction: column;
@@ -6,22 +7,21 @@
     align-items: flex-start;
 
     height: 100%;
-    width: 13%;
-
-    padding: 20px 0;
+    width: 100%;
 
     box-sizing: border-box;
 
     &Title {
         width: 100%;
 
-        margin-bottom: 20px;
-        padding: 20px;
+        padding-top: 20px;
+        padding-bottom: 10px;
 
         font-size: 2.1rem;
         text-align: center;
-        background-color: $day_background;
-        color: $day_text_color;
+        color: $weekDay_color;
+
+        border-bottom: 2px solid $weekDay_divider;
 
         &Today {
             @extend .weekDayTitle;
@@ -32,8 +32,8 @@
         &Disabled {
             @extend .weekDayTitle;
 
-            background-color: lighten($day_background, 3);
-            color: lighten($day_text_color, 30);
+            background-color: lighten($weekDay_background, 3);
+            color: lighten($weekDay_color, 30);
         }
     }
 
@@ -43,19 +43,11 @@
 
         padding: 10px;
 
-        background-color: $day_background;
-
         overflow-y: scroll;
         scrollbar-width: none;
 
         &::-webkit-scrollbar {
             display: none;
-        }
-
-        &Disabled {
-            @extend .weekDayTasks;
-
-            background-color: lighten($day_background, 3);
         }
     }
 
@@ -70,8 +62,6 @@
 
         margin-top: 20px;
         padding: 13px 12px;
-
-        background-color: $day_background;
     }
 }
 
@@ -83,7 +73,8 @@
     align-items: center;
 
     margin: 10px 0;
-    padding: 40px 0;
+    padding-top: 20px;
+    padding-bottom: 34px;
 
     border-radius: 5px;
 
@@ -95,7 +86,7 @@
     }
 
     &Name {
-        font-size: 1.7rem;
+        font-size: 1.2rem;
         text-align: center;
 
         user-select: none;
@@ -107,6 +98,8 @@
 
         height: 16px;
         width: 100%;
+
+        border-radius: 0 0 5px 5px;
 
         background-color: rgba(128, 128, 128, 0.145);
 
@@ -130,7 +123,6 @@
         width: 90%;
 
         border: none;
-        border-radius: 6px;
         outline: none;
 
         font-size: 1.6rem;
@@ -144,28 +136,21 @@
         padding: 2px 7px;
 
         border: none;
-        border-radius: 3px;
+        border-radius: 2px;
         outline: none;
 
         font-size: 1rem;
-        background-color: rgb(87, 221, 87);
-        color: white;
+        background-color: rgb(245, 245, 245);
+        color: $weekDay_color;
 
         &:hover {
-            background-color: rgb(48, 204, 48);
+            background-color: darken(rgb(245, 245, 245), 4);
 
             cursor: pointer;
         }
 
         &Disabled {
-            @extend .addNewSubmit;
-
-            background-color: rgb(120, 240, 120);
-
-            &:hover {
-                cursor: default;
-                background-color: rgb(120, 240, 120);
-            }
+            opacity: 0;
         }
     }
 }
