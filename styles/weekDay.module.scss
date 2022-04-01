@@ -9,6 +9,8 @@
     height: 100%;
     width: 100%;
 
+    margin: 0 10px;
+
     box-sizing: border-box;
 
     &Title {
@@ -79,6 +81,7 @@
     border-radius: 5px;
 
     color: white;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.608);
 
     &Time {
         font-size: 1rem;

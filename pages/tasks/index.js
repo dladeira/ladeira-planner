@@ -40,8 +40,17 @@ function Task({ task, user }) {
         <div className={styles.taskContainer} style={{ backgroundColor: task.color }}>
             <div className={styles.taskTitle}>{task.name}</div>
             <div className={styles.taskHours}>Total: {getTotalHoursForTask(task.id, user)}h</div>
+            <div className={styles.taskCategory}>{getCategory(task.category, user)}</div>
         </div>
     )
+}
+
+function getCategory(taskCategory, user) {
+    for (var category of user.categories) {
+        if (category.id == taskCategory) {
+            return category.name
+        }
+    }
 }
 
 function getTotalHoursForTask(taskId, user) {

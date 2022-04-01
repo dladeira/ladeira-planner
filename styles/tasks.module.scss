@@ -58,18 +58,19 @@
     opacity: 0.8;
 
     background-color: $weekDay_background;
-        &:hover {
-            cursor: pointer;
+    &:hover {
+        cursor: pointer;
 
-            background-color: darken($weekDay_background, 3)
-        }
+        background-color: darken($weekDay_background, 3);
+    }
 }
 
 .edits {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
+    flex-wrap: wrap;
 
     margin-top: 20px;
 }
@@ -78,15 +79,28 @@
     &Container {
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: space-evenly;
         align-items: center;
+        flex-wrap: wrap;
 
-        width: 90%;
+        width: 600px;
 
         margin: 5px 0;
         padding: 10px;
 
-        background-color: $weekDay_background;
+        background-color: rgb(247, 247, 247);
+    }
+
+    &Container * {
+        margin: 10px;
+    }
+
+    &Header {
+        width: fit-content;
+
+        margin: 50px auto 20px auto;
+
+        font-size: 4rem;
     }
 
     &Title {
@@ -95,7 +109,7 @@
         border: none;
 
         font-size: 2rem;
-        background-color: rgba(255, 255, 255, 0.713);
+        background-color: rgba(255, 255, 255, 0.8);
 
         &:focus {
             background-color: rgb(255, 255, 255);
@@ -105,15 +119,24 @@
     &Color {
         height: 66px;
 
-        margin-left: 20px;
         padding: 5px;
+
+        border: none;
+
+        background-color: white;
     }
 
     &Button {
         height: 66px;
-        width: 66px;
+        width: 120px;
 
         margin-left: 20px;
+
+        font-size: 1.5rem;
+        text-align: center;
+
+        border: none;
+        background-color: rgb(255, 255, 255);
 
         &:hover {
             cursor: pointer;
@@ -126,6 +149,12 @@
 
     &Delete {
         @extend .editButton;
+    }
+
+    &Category {
+        @extend .editButton;
+
+        width: 220px;
     }
 
     &Changed {
@@ -143,8 +172,6 @@
 
     margin: 5px auto;
     padding: 10px;
-
-    background-color: $weekDay_background;
 
     &Submit {
         height: 4rem;

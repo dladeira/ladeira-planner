@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
     days: {
         type: Array,
         default: []
+    },
+    categories: {
+        type: Array,
+        default: []
     }
 })
 
