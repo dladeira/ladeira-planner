@@ -7,15 +7,26 @@ html {
 }
 
 body {
-    height: calc(100% - $navbar_height);
+    height: 100%;
 
     margin: 0;
-    margin-top: $navbar_height;
 
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
 
     background-color: $global_background;
     color: black;
+}
+
+.mainBody {
+    height: 100%;
+
+    padding-top: $navbar_height;
+}
+
+.userBody {
+    height: 100%;
+
+    padding-left: $userbar_width;
 }
 
 #__next {

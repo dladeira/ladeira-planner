@@ -1,8 +1,8 @@
-import { useUser } from '../../lib/hooks'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useUser } from '../../../lib/hooks'
 
-import styles from '../../styles/tasks.module.scss'
+import styles from '../../../styles/tasks.module.scss'
 
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
@@ -27,7 +27,7 @@ function Page() {
                     <Task key={task.id} task={task} user={user} />
                 ))}
             </div>
-            <Link href="/tasks/edit">
+            <Link href="/user/tasks/edit">
                 <a className={styles.editLink}>Edit Tasks</a>
             </Link>
         </div>

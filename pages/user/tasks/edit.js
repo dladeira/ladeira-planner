@@ -1,7 +1,7 @@
-import { useUser } from '../../lib/hooks'
+import { useUser } from '../../../lib/hooks'
 import { useState, useEffect } from 'react'
 
-import styles from '../../styles/tasks.module.scss'
+import styles from '../../../styles/tasks.module.scss'
 
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
@@ -16,7 +16,7 @@ function Page() {
     }, [user])
 
     function getSortedTasks() {
-        var sorted = user.tasks.sort((a, b) => a.name.localeCompare(b.name))
+        var sorted = tasks.sort((a, b) => a.name.localeCompare(b.name))
 
         return sorted
     }

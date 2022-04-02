@@ -1,9 +1,9 @@
-import { useUser } from '../lib/hooks'
+import { useUser } from '../../lib/hooks'
 import { useState, useEffect } from 'react'
 
-import WeekDay from '../components/weekDay'
+import WeekDay from '../../components/weekDay'
 
-import styles from '../styles/schedule.module.scss'
+import styles from '../../styles/schedule.module.scss'
 
 var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 

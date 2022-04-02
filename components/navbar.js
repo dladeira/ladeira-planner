@@ -8,22 +8,6 @@ function Component() {
 
     return (
         <div className={styles.container} >
-
-            {user ? (
-                <div className={styles.linkContainer}>
-                    <Link href={"/schedule"}>
-                        <a className={styles.linkSchedule} draggable="false">
-                            Schedule
-                        </a>
-                    </Link>
-                    <Link href={"/tasks"}>
-                        <a className={styles.linkTasks} draggable="false">
-                            Tasks
-                        </a>
-                    </Link>
-                </div>
-            ) : <div className={styles.linkContainer} />
-            }
             <div className={styles.brandContainer}>
                 <Link href={"/"}>
                     <a className={styles.brand} draggable="false">
@@ -31,15 +15,30 @@ function Component() {
                     </a>
                 </Link>
             </div>
-            {user ? (
-                <div className={styles.authContainer}>
-                    <Link href={user ? "/api/logout" : "/api/login"}>
-                        <a className={styles.authLogin} draggable="false">
-                            {user ? "LOGOUT" : "LOGIN"}
-                        </a>
-                    </Link>
-                </div>
-            ) : <div className={styles.authContainer} />}
+            <div className={styles.linkContainer}>
+                <Link href={"/"}>
+                    <a className={styles.link} draggable="false">
+                        Features
+                    </a>
+                </Link>
+                <Link href={"/"}>
+                    <a className={styles.link} draggable="false">
+                        Tasks
+                    </a>
+                </Link>
+                <Link href={"/"}>
+                    <a className={styles.link} draggable="false">
+                        About us
+                    </a>
+                </Link>
+            </div>
+            <div className={user ? styles.authContainerLogout : styles.authContainer}>
+                <Link href={user ? "/api/logout" : "/api/login"}>
+                    <a className={user ? styles.authLogout : styles.authLogin} draggable="false">
+                        {user ? "Logout" : "Login"}
+                    </a>
+                </Link>
+            </div>
         </div >
     )
 }

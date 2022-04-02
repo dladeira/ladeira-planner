@@ -6,17 +6,33 @@
     justify-content: center;
     align-items: center;
 
+    height: 100%;
+
     padding-top: 20px;
 
-    color: $weekDay_color;
+    color: black;
+
+    overflow-y: hidden;
 }
 
 .title {
-    font-size: 9rem;
+    width: 1000px;
+
+    font-size: 6.5rem;
+    font-weight: bold;
+    text-align: center;
+    line-height: 110%;
 }
 
 .subtitle {
-    font-size: 3rem;
+    width: 800px;
+
+    margin-top: 20px;
+
+    font-size: 2.6rem;
+    font-weight: lighter;
+    text-align: center;
+    line-height: 159%;
 }
 
 .email {
@@ -24,16 +40,29 @@
 }
 
 .enter {
-    margin-top: 400px;
+    margin: 40px 0 30px 0;
     padding: 20px 40px;
 
     border-radius: 20px;
 
-    font-size: 4.5rem;
-    background-color: #66B7FC;
+    font-size: 3.5rem;
+    background-color: $login_color;
     color: white;
 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+
     &:hover {
-        background-color: darken(#66B7FC, 5);
+        background-color: darken($login_color, 5);
     }
+}
+
+
+.imageWrapper {
+    height: 500px;
+    width: 100%;
+
+    filter: blur(3px);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.8)), url("/landing-preview-original.png");
+    background-position: center 0;
+    background-size: cover;
 }
