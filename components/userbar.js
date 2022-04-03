@@ -21,13 +21,11 @@ function Component() {
                 <BarLink text="Tasks" location="/user/tasks" />
                 <BarLink text="Analysis" location="/user/analysis" />
             </div>
-            <div className={styles.authContainer}>
-                <Link href={"/api/logout"}>
-                    <a className={styles.authLogout} draggable="false">
-                        Logout
-                    </a>
-                </Link>
-            </div>
+            <Link href={"/api/logout"}>
+                <a className={styles.authLogout} draggable="false">
+                    Logout
+                </a>
+            </Link>
         </div >
     )
 }

@@ -74,20 +74,32 @@
 
         font-size: 1.5rem;
 
-        &Logout {
-            @extend .authContainer;
-
-            border-color: $logout_color;
-        }
+        transition: cubic-bezier(.22,.61,.36,1) 300ms all;
     }
 
     &Login {
+        @extend .authContainer;
+
         font-weight: normal;
         color: $login_color;
+
+        &:hover {
+            background-color: $login_color;
+            color: white;
+        }
     }
 
     &Logout {
+        @extend .authContainer;
+
         font-weight: normal;
         color: $logout_color;
+
+        border-color: $logout_color;
+
+        &:hover {
+            background-color: $logout_color;
+            color: white;
+        }
     }
 }

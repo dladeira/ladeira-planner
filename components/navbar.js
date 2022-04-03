@@ -32,13 +32,11 @@ function Component() {
                     </a>
                 </Link>
             </div>
-            <div className={user ? styles.authContainerLogout : styles.authContainer}>
-                <Link href={user ? "/api/logout" : "/api/login"}>
-                    <a className={user ? styles.authLogout : styles.authLogin} draggable="false">
-                        {user ? "Logout" : "Login"}
-                    </a>
-                </Link>
-            </div>
+            <Link href={user ? "/api/logout" : "/api/login"}>
+                <a className={user ? styles.authLogout : styles.authLogin} draggable="false">
+                    {user ? "Logout" : "Login"}
+                </a>
+            </Link>
         </div >
     )
 }
