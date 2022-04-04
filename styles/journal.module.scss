@@ -1,0 +1,134 @@
+@import "./variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    width: 90%;
+
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+.weekNumber {
+    &Container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        height: 3rem;
+        width: 95%;
+
+        margin: 0 auto;
+
+        font-weight: 300;
+        font-size: 2rem;
+        text-align: center;
+        color: $weekDay_color;
+    }
+
+    &Bar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 3rem;
+    }
+
+    &Text {
+        @extend .weekNumberBar;
+
+        width: 100%;
+    }
+
+    &Arrow {
+        @extend .weekNumberBar;
+
+        &Left {
+            @extend .weekNumberArrow;
+            margin-right: 20px;
+        }
+
+        &Right {
+            @extend .weekNumberArrow;
+            margin-left: 20px;
+        }
+
+        &Text {
+            height: fit-content;
+            width: fit-content;
+
+            margin-bottom: 5px;
+
+            font-size: 3rem;
+        }
+
+        &:hover {
+            color: rgb(90, 90, 90);
+
+            cursor: pointer;
+        }
+
+        user-select: none;
+        width: 80px;
+    }
+}
+
+.weekDays {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    height: 4.5rem;
+    width: 100%;
+
+    margin: 20px auto 70px auto;
+
+    background-color: $weekDay_background;
+
+    overflow-y: hidden;
+}
+
+.weekDay {
+    height: 100%;
+    width: 100%;
+
+    margin: 0 10px;
+
+    font-size: 2.1rem;
+    text-align: center;
+    color: $weekDay_color;
+
+    user-select: none;
+
+    box-sizing: border-box;
+
+    &Current {
+        @extend .weekDay;
+
+        font-weight: bold;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    height: 100%;
+    width: 100%;
+}
+
+.chart {
+    height: 600px;
+    width: 600px;
+}

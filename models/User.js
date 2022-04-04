@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
     categories: {
         type: Array,
         default: []
+    },
+    ratings: {
+        type: Array,
+        default: []
     }
 })
 

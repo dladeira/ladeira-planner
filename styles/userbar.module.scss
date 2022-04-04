@@ -13,7 +13,6 @@
     height: 100%;
     width: $userbar_width;
 
-    font-size: 2rem;
     font-weight: bold;
 
     padding: 10px 30px;
@@ -56,7 +55,8 @@
     margin: 0 20px;
 
     font-weight: normal;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    line-height: 2rem;
     color: $weekDay_color;
 
     cursor: pointer;
