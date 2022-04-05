@@ -134,7 +134,6 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
             newTasks.splice(taskIndex, 1)
         }
 
-
         setTasks([...newTasks])
 
         var newDays = user.days
@@ -151,6 +150,11 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     useEffect(() => {
         document.addEventListener("mousemove", moveHandler, true)
         document.addEventListener("mouseup", mouseUpHandler, true)
+
+        return () => {
+            document.removeEventListener("mousemove", moveHandler, true)
+            document.removeEventListener("mouseup", mouseUpHandler, true)
+        }
     })
 
     function moveHandler(e) {

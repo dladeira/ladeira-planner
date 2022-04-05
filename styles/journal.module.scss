@@ -129,6 +129,27 @@
 }
 
 .chart {
-    height: 600px;
-    width: 600px;
+    width: 40%;
+}
+
+.starContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.rating {
+    $starSize: 2rem;
+
+    height: $starSize;
+    width: $starSize;
+
+    margin: 3px;
+
+    font-size: $starSize;
+
+    &:hover {
+        cursor: pointer;
+    }
 }

@@ -1,5 +1,5 @@
-import { useUser } from '../../lib/hooks'
 import { useState, useEffect } from 'react'
+import { useUser } from '../../lib/hooks'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { Doughnut, Dougnut } from 'react-chartjs-2'
 
@@ -8,7 +8,7 @@ import styles from '../../styles/journal.module.scss'
 var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 function Page() {
-    var user = useUser({ redirectTo: '/api/login' })
+    const user = useUser({ redirectTo: '/api/login' })
     var date = new Date()
     const [tasks, setTasks] = useState()
     const [selectedDay, setSelectedDay] = useState(getWeekDay(date))
@@ -99,27 +99,152 @@ function Page() {
 
             <div className={styles.content}>
                 <div className={styles.chart}>
-                    <Doughnut data={getChartData(user, selectedWeek, selectedDay)} width={10} height={10} options={options} />
+                    <Doughnut data={getChartData(user, selectedDay, selectedWeek, selectedYear)} width={10} height={10} options={options} />
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <div className={styles.inputHeader}>Note</div>
+                    <NoteInput user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} />
+                    <div className={styles.inputHeader}>Ratings</div>
+                    <div className={styles.ratings}>
+                        {user.ratings.map(rating => <Rating key={`${selectedDay}-${selectedWeek}-${selectedYear}-${rating.id}`} rating={rating} user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} />)}
+                    </div>
                 </div>
             </div>
         </div>
     ) : <div />)
 }
 
-function getChartData(user, week, day) {
-    var day
-    var labels = []
-    var data = []
+function NoteInput({ user, day }) {
+    var text = getDefaultNote()
+    var edited = false
 
-    for (var selectedDay of user.days) {
-        if (selectedDay.week == week && selectedDay.day == day) {
-            day = selectedDay
-        }
+    var timeSinceEdit = 0
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            timeSinceEdit += 100
+
+            if (timeSinceEdit > 1000 && edited) {
+                saveNote()
+            }
+        }, 100)
+
+        return () => clearInterval(id)
+    }, [])
+
+    function saveNote() {
+        setEdited(false)
+        edited = false
+
+        var newDays = [...user.days]
+        newDays[newDays.indexOf(day)].note = text
+
+        fetch(window.origin + "/api/days", {
+            body: JSON.stringify({
+                email: user.email,
+                days: newDays
+            }),
+            method: "POST"
+        })
     }
 
-    for (var tasks of day.tasks) {
-        labels.push(getTask(tasks.taskId, user).name)
-        data.push(tasks.time)
+    function getDefaultNote() {
+        if (day.note) {
+            return day.note
+        }
+
+        return ""
+    }
+
+    function setEdited(edited) {
+        document.getElementById("saveStatus").innerHTML = edited ? "Saving..." : "Saved"
+    }
+
+    function onChange(e) {
+        timeSinceEdit = 0
+
+        setEdited(true)
+        edited = true
+
+        text = e.target.value
+    }
+
+    return (
+        <div>
+            <textarea type="text" onChange={onChange} defaultValue={text} />
+            <div id={"saveStatus"}>Saved</div>
+        </div>
+    )
+}
+
+function Rating({ rating, user, day }) {
+    const [ratingCount, setRatingCount] = useState(getDefaultRating())
+
+    function setRating(newRating) {
+        if (newRating == ratingCount) // Reset rating
+            return setRating(0)
+
+        setRatingCount(newRating)
+
+        var newDays = [...user.days]
+        var dayIndex = newDays.indexOf(day)
+
+        if (!newDays[dayIndex].ratings)
+            newDays[dayIndex].ratings = {}
+
+        newDays[dayIndex].ratings[rating.id] = newRating
+
+        fetch(window.origin + "/api/days", {
+            body: JSON.stringify({
+                email: user.email,
+                days: newDays
+            }),
+            method: "POST"
+        })
+    }
+
+    function getDefaultRating() {
+        if (day) {
+            if (day.ratings) {
+                if (day.ratings[rating.id]) {
+                    return day.ratings[rating.id]
+                }
+            }
+        }
+
+        return 0
+    }
+    return (
+        <div className={styles.ratingContainer}>
+            <div className={styles.ratingText}>{rating.name}</div>
+            <div className={styles.starContainer}>
+                <div className={styles.rating} onClick={() => setRating(1)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 0 ? "fas" : "far")} fa-star"></i>` }} />
+                <div className={styles.rating} onClick={() => setRating(2)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 1 ? "fas" : "far")} fa-star"></i>` }} />
+                <div className={styles.rating} onClick={() => setRating(3)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 2 ? "fas" : "far")} fa-star"></i>` }} />
+                <div className={styles.rating} onClick={() => setRating(4)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 3 ? "fas" : "far")} fa-star"></i>` }} />
+                <div className={styles.rating} onClick={() => setRating(5)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 4 ? "fas" : "far")} fa-star"></i>` }} />
+            </div>
+        </div >
+    )
+}
+
+function getChartData(user, day, week, year) {
+    var day = getDay(user, day, week, year)
+    var labels = []
+    var data = []
+    var backgroundColor = []
+
+    if (day && day.tasks) {
+        for (var task of day.tasks) {
+            labels.push(getTask(task.taskId, user).name)
+            backgroundColor.push(getTask(task.taskId, user).color)
+            data.push(task.time)
+        }
+    } else {
+        labels.push("NONE")
+        backgroundColor.push("gray")
+        data.push(1)
     }
 
     var data = {
@@ -127,16 +252,20 @@ function getChartData(user, week, day) {
         datasets: [
             {
                 data: data,
-                backgroundColor: [
-                    "red",
-                    "green",
-                    "yellow"
-                ]
+                backgroundColor: backgroundColor
             }
         ]
     }
 
     return data
+}
+
+function getDay(user, day, week, year) {
+    for (var selectedDay of user.days) {
+        if (selectedDay.week == week && selectedDay.day == day && selectedDay.currentYear == year) {
+            return selectedDay
+        }
+    }
 }
 
 function getTask(id, user) {
