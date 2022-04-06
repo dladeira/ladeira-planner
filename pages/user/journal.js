@@ -104,10 +104,10 @@ function Page() {
 
                 <div className={styles.inputContainer}>
                     <div className={styles.inputHeader}>Note</div>
-                    <NoteInput user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} />
+                    <NoteInput user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} selectedData={{ day: selectedDay, week: selectedWeek, year: selectedYear }} />
                     <div className={styles.inputHeader}>Ratings</div>
                     <div className={styles.ratings}>
-                        {user.ratings.map(rating => <Rating key={`${selectedDay}-${selectedWeek}-${selectedYear}-${rating.id}`} rating={rating} user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} />)}
+                        {user.ratings.map(rating => <Rating key={`${selectedDay}-${selectedWeek}-${selectedYear}-${rating.id}`} selectedData={{ day: selectedDay, week: selectedWeek, year: selectedYear }} rating={rating} user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} />)}
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@ function Page() {
     ) : <div />)
 }
 
-function NoteInput({ user, day }) {
+function NoteInput({ user, day, selectedData }) {
     var text = getDefaultNote()
     var edited = false
 
@@ -138,7 +138,13 @@ function NoteInput({ user, day }) {
         edited = false
 
         var newDays = [...user.days]
-        newDays[newDays.indexOf(day)].note = text
+        var dayIndex = newDays.indexOf(day)
+
+        if (dayIndex >= 0) {
+            newDays[dayIndex].note = text
+        } else {
+            newDays.push({ currentYear: selectedData.year, week: selectedData.week, day: selectedData.day, note: text, tasks: [] })
+        }
 
         fetch(window.origin + "/api/days", {
             body: JSON.stringify({
@@ -150,7 +156,7 @@ function NoteInput({ user, day }) {
     }
 
     function getDefaultNote() {
-        if (day.note) {
+        if (day && day.note) {
             return day.note
         }
 
@@ -178,7 +184,7 @@ function NoteInput({ user, day }) {
     )
 }
 
-function Rating({ rating, user, day }) {
+function Rating({ rating, user, day, selectedData }) {
     const [ratingCount, setRatingCount] = useState(getDefaultRating())
 
     function setRating(newRating) {
@@ -190,8 +196,13 @@ function Rating({ rating, user, day }) {
         var newDays = [...user.days]
         var dayIndex = newDays.indexOf(day)
 
-        if (!newDays[dayIndex].ratings)
-            newDays[dayIndex].ratings = {}
+        if (dayIndex >= 0) {
+            if (!newDays[dayIndex].ratings) {
+                newDays[dayIndex].ratings = {}
+            }
+        } else {
+            newDays.push({ currentYear: selectedData.year, week: selectedData.week, day: selectedData.day, note: text, tasks: [] })
+        }
 
         newDays[dayIndex].ratings[rating.id] = newRating
 
@@ -237,6 +248,7 @@ function getChartData(user, day, week, year) {
 
     if (day && day.tasks) {
         for (var task of day.tasks) {
+            console.log(day)
             labels.push(getTask(task.taskId, user).name)
             backgroundColor.push(getTask(task.taskId, user).color)
             data.push(task.time)
