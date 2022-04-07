@@ -103,7 +103,6 @@ function Page() {
                 </div>
 
                 <div className={styles.inputContainer}>
-                    <div className={styles.inputHeader}>Note</div>
                     <NoteInput user={user} day={getDay(user, selectedDay, selectedWeek, selectedYear)} selectedData={{ day: selectedDay, week: selectedWeek, year: selectedYear }} />
                     <div className={styles.inputHeader}>Ratings</div>
                     <div className={styles.ratings}>
@@ -177,9 +176,10 @@ function NoteInput({ user, day, selectedData }) {
     }
 
     return (
-        <div>
-            <textarea type="text" onChange={onChange} defaultValue={text} />
-            <div id={"saveStatus"}>Saved</div>
+        <div className={styles.noteContainer}>
+            <div className={styles.inputHeader}>Note</div>
+            <textarea rows="10" cols="2000" className={styles.noteArea} type="text" onChange={onChange} defaultValue={text} />
+            <div className={styles.noteStatus} id={"saveStatus"}>Saved</div>
         </div>
     )
 }

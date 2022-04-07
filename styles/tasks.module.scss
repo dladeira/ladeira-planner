@@ -1,70 +1,5 @@
 @import "./variables.scss";
 
-.tasks {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
-
-    width: 90%;
-
-    margin: 20px auto 0 auto;
-}
-
-.task {
-    &Container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-
-        height: 200px;
-        width: 300px;
-
-        margin: 10px;
-        padding: 20px;
-
-        border-radius: 5px;
-        color: white;
-    }
-
-    &Title {
-        font-size: 1.5rem;
-    }
-
-    &Hours {
-        margin-top: 4px;
-
-        font-size: 1rem;
-    }
-}
-
-.editLink {
-    display: block;
-
-    width: 92%;
-
-    margin: 30px auto;
-    padding: 10px;
-
-    border-radius: 5px;
-
-    font-size: 3rem;
-    font-weight: bold;
-    text-align: center;
-    color: $weekDay_color;
-
-    opacity: 0.8;
-
-    background-color: $weekDay_background;
-    &:hover {
-        cursor: pointer;
-
-        background-color: darken($weekDay_background, 3);
-    }
-}
-
 .edits {
     display: flex;
     flex-direction: row;
@@ -85,7 +20,7 @@
 
         width: 600px;
 
-        margin: 5px 0;
+        margin: 10px 0;
         padding: 10px;
 
         background-color: rgb(247, 247, 247);
