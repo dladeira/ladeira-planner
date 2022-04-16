@@ -30,7 +30,7 @@ function Page() {
 
                 <div className={styles.thisWeekContainer}>
                     <div className={styles.thisWeekHours}>
-                        {getHoursInWeek(user, currentWeek, date.getFullYear())}
+                        {Math.round(getHoursInWeek(user, currentWeek, date.getFullYear()))}
                     </div>
                     <div className={styles.thisWeekSubtitle}>
                         Hours this week
