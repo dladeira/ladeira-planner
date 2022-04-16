@@ -1,9 +1,9 @@
-# Asw Plus
-AswPlus Github Repo, to run you are going to need a .env file, below is a example one:
+# Ladeira Planner
+Ladeira Planner Github Repo, to run you are going to need a .env file, below is a example one:
 
 ```
 TOKEN_SECRET="this-is-a-secret-value-with-at-least-32-characters"
-MONGODB_URI="mongodb://127.0.0.1:27017/aswplus"
+MONGODB_URI="mongodb://127.0.0.1:27017/ladeira-planner"
 
 GOOGLE_CLIENT=
 GOOGLE_SECRET=
