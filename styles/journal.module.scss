@@ -165,6 +165,7 @@
         width: 100%;
 
         margin: 5px;
+        padding: 5px;
 
         border-radius: 15px;
         border: 2px solid gray;
@@ -172,6 +173,10 @@
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
 
         resize: none;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     &Status {

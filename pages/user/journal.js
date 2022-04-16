@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '../../lib/hooks'
 import { Chart as ChartJS } from 'chart.js/auto'
-import { Doughnut, Dougnut } from 'react-chartjs-2'
+import { Doughnut } from 'react-chartjs-2'
 
 import styles from '../../styles/journal.module.scss'
 
-var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const chartOptions = {
+    cutout: 150
+}
 
 function Page() {
     const user = useUser({ redirectTo: '/api/login' })
@@ -73,10 +75,6 @@ function Page() {
         }
     }, [user])
 
-    const options = {
-        cutout: 150
-    }
-
     return (user && tasks ? (
         <div className={styles.container}>
             <div className={styles.weekNumberContainer}>
@@ -99,7 +97,7 @@ function Page() {
 
             <div className={styles.content}>
                 <div className={styles.chart}>
-                    <Doughnut data={getChartData(user, selectedDay, selectedWeek, selectedYear)} width={10} height={10} options={options} />
+                    <Doughnut data={getChartData(user, selectedDay, selectedWeek, selectedYear)} width={10} height={10} options={chartOptions} />
                 </div>
 
                 <div className={styles.inputContainer}>
@@ -246,7 +244,7 @@ function getChartData(user, day, week, year) {
     var data = []
     var backgroundColor = []
 
-    if (day && day.tasks) {
+    if (day && day.tasks && day.tasks.length > 0) {
         for (var task of day.tasks) {
             console.log(day)
             labels.push(getTask(task.taskId, user).name)
@@ -287,33 +285,6 @@ function getTask(id, user) {
     }
 }
 
-Date.prototype.getCurrentWeek = () => {
-    var date = new Date()
-
-    // ISO week date weeks start on Monday, so correct the day number
-    var nDay = (date.getDay() + 6) % 7
-
-    // ISO 8601 states that week 1 is the week with the first Thursday of that year
-    // Set the target date to the Thursday in the target week
-    date.setDate(date.getDate() - nDay + 3)
-
-    // Store the millisecond value of the target date
-    var n1stThursday = date.valueOf()
-
-    // Set the target to the first Thursday of the year
-    // First, set the target to January 1st
-    date.setMonth(0, 1)
-
-    // Not a Thursday? Correct the date to the next Thursday
-    if (date.getDay() !== 4) {
-        date.setMonth(0, 1 + ((4 - date.getDay()) + 7) % 7)
-    }
-
-    // The week number is the number of weeks between the first Thursday of the year
-    // and the Thursday in the target week (604800000 = 7 * 24 * 3600 * 1000)
-    return 1 + Math.ceil((n1stThursday - date) / 604800000)
-}
-
 function getWeekDay(date) {
     var dayNumber = date.getDay() - 1
     return dayNumber < 0 ? 6 : dayNumber
@@ -340,4 +311,5 @@ function isInYear(year, week, dayIndex) {
     return true
 
 }
+
 export default Page

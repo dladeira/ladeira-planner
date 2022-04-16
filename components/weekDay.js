@@ -199,15 +199,15 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     )
 }
 
+function roundToFourth(number) {
+    return (Math.round(number * 4) / 4).toFixed(2);
+}
+
 function getTask(id, user) {
     for (var i = 0; i < user.tasks.length; i++) {
         if (user.tasks[i].id == id)
             return user.tasks[i]
     }
-}
-
-function roundToFourth(number) {
-    return (Math.round(number * 4) / 4).toFixed(2);
 }
 
 export default WeekDay
