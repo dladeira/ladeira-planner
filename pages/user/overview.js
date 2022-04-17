@@ -7,7 +7,7 @@ import styles from '../../styles/overview.module.scss'
 const date = new Date()
 
 const chartOptions = {
-    cutout: 160
+    cutout: 150,
 }
 
 function Page() {

@@ -39,12 +39,9 @@
 }
 
 .chart {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 100%;
     width: 40%;
+
+    margin-bottom: 50px;
 }
 
 .thisWeek {
@@ -54,16 +51,18 @@
     }
 
     &Hours {
-        height: 26rem;
+        height: 20rem;
 
-        font-size: 23rem;
+        margin-right: 50px;
+
+        font-size: 17rem;
         font-weight: bold;
         text-align: center;
         color: $brand_color;
     }
 
     &Subtitle {
-        font-size: 3.5rem;
+        font-size: 2.5rem;
         font-weight: 500;
         text-align: center;
         color: black;
