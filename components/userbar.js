@@ -21,8 +21,8 @@ function Component() {
                 <BarLink text="Schedule" location="/user/schedule" />
                 <BarLink text="Journal" location="/user/journal" />
                 <BarLink text="Settings" location="/user/settings" />
-                <BarLink text="Documentation" location="/user/overview" />
-                <BarLink text="API" location="/user/overview" />
+                {/* <BarLink text="Documentation" location="/user/overview" />
+                <BarLink text="API" location="/user/overview" /> */}
             </div>
             <Link href={"/api/logout"}>
                 <a className={styles.authLogout} draggable="false">

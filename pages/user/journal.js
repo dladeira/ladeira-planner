@@ -199,7 +199,8 @@ function Rating({ rating, user, day, selectedData }) {
                 newDays[dayIndex].ratings = {}
             }
         } else {
-            newDays.push({ currentYear: selectedData.year, week: selectedData.week, day: selectedData.day, note: text, tasks: [] })
+            newDays.push({ currentYear: selectedData.year, week: selectedData.week, day: selectedData.day, note: "", tasks: [], ratings: {} })
+            dayIndex = newDays.length - 1
         }
 
         newDays[dayIndex].ratings[rating.id] = newRating

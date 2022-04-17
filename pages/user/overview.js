@@ -14,9 +14,6 @@ function Page() {
     const user = useUser({ redirectTo: '/api/login' })
     const currentWeek = date.getCurrentWeek()
 
-    if (user)
-        console.log(getChartData(user))
-
     return (user ? (
         <div className={styles.container}>
             <div className={styles.weekHeader}>
@@ -89,11 +86,13 @@ function getChartData(user) {
     if (tasks.length > 0) {
         for (var task of tasks) {
             var exists = false
+            var dataIndex = -1
             var name = getTask(task.taskId, user).name
 
-            for (var label of labels) {
-                if (label == name) {
+            for (var labelIndex in labels) {
+                if (labels[labelIndex] == name) {
                     exists = true
+                    dataIndex = labelIndex
                 }
             }
 
@@ -101,6 +100,8 @@ function getChartData(user) {
                 labels.push(name)
                 backgroundColor.push(getTask(task.taskId, user).color)
                 data.push(task.time)
+            } else {
+                data[dataIndex] += task.time
             }
         }
     } else {
