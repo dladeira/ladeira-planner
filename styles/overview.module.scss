@@ -7,10 +7,10 @@
     align-items: center;
 
     height: 100%;
-    width: 85%;
+    width: 83%;
 
     margin: 0 auto;
-    padding: 0 10px;
+    padding: 10px 10px;
 }
 
 .weekHeader {
@@ -18,9 +18,9 @@
     width: fit-content;
 
     margin-right: auto;
-    padding: 0 30px;
+    padding: 0 20px;
 
-    border-bottom: 3px solid $font_color_1;
+    border-bottom: 2px solid $font_color_2;
 
     font-size: 2rem;
     color: $font_color_1;
@@ -51,11 +51,11 @@
     }
 
     &Hours {
-        height: 20rem;
+        height: 23rem;
 
         margin-right: 50px;
 
-        font-size: 17rem;
+        font-size: 20rem;
         font-weight: bold;
         text-align: center;
         color: $brand_color;
@@ -76,7 +76,6 @@
     align-items: flex-end;
 
     margin-top: auto;
-    margin-bottom: 20px;
 
     width: 100%;
 }
@@ -88,7 +87,7 @@
     &Header {
         padding-bottom: 5px;
 
-        border-bottom: 2px solid $font_color_1;
+        border-bottom: 2px solid $font_color_2;
 
         font-size: 2rem;
         text-align: center;

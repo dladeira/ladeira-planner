@@ -15,7 +15,7 @@
 
     font-weight: bold;
 
-    padding: 10px 30px;
+    padding: 10px 0;
 
     background-color: $navbar_background;
     color: $navbar_color;
@@ -46,6 +46,9 @@
 .link {
     &Container {
         @extend .itemContainer;
+        align-items: flex-start;
+
+        width: 100%;
 
         margin-top: 40px;
     }
@@ -55,8 +58,8 @@
     margin: 0 20px;
 
     font-weight: normal;
-    font-size: 1.2rem;
-    line-height: 2rem;
+    font-size: 1.4rem;
+    line-height: 2.3rem;
     color: $weekDay_color;
 
     cursor: pointer;
