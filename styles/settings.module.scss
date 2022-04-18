@@ -1,0 +1,202 @@
+@import "./variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    width: 90%;
+
+    margin: 10px auto;
+}
+
+.setting {
+    min-width: 200px;
+    flex-grow: 1;
+}
+
+.settingHeader {
+    margin-bottom: 20px;
+
+    border-bottom: 2px solid $font_color_2;
+
+    font-size: 2rem;
+    text-align: center;
+}
+
+.settingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.task {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    height: 35px;
+    width: 90%;
+
+    margin: 5px auto;
+
+    &Normal {
+        @extend .task;
+
+        padding-top: 9px;
+
+        &Category {
+            display: block;
+            
+            height: 30px;
+
+            width: 100px;
+
+            padding-left: 4px;
+
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: $font_color_1;
+        }
+
+        &Name {
+            display: block;
+
+            height: 25px;
+            width: 300px;
+
+            font-size: 1rem;
+            color: $font_color_1;
+        }
+
+        &Edit {
+            margin-left: 5px;
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+            background-color: $green_1;
+            color: white;
+
+            &:hover {
+                background-color: darken($green_1, 5);
+
+                cursor: pointer;
+            }
+        }
+    }
+
+    &Edit {
+        @extend .task;
+
+        &Category {
+            @extend .taskNormalCategory;
+
+            height: 35px;
+
+            padding-left: 0;
+
+            border: 2px solid $font_color_2;
+            border-radius: 5px;
+
+            background-color: transparent;
+        }
+
+        &Name {
+            @extend .taskNormalName;
+
+            height: 35px;
+            width: 150px;
+
+            margin-left: 5px;
+
+            border: 2px solid $font_color_2;
+            border-radius: 5px;
+
+            background-color: transparent;
+        }
+
+        &Color {
+            height: 100%;
+
+            margin-left: 5px;
+            padding: 0;
+
+            border: 2px solid $font_color_2;
+            border-radius: 5px;
+
+            background-color: transparent;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &Save {
+            height: 100%;
+
+            margin-left: 5px;
+            padding: 5px 10px;
+
+            border: none;
+            border-radius: 5px;
+
+            font-size: 1rem;
+            background-color: $brand_color;
+            color: white;
+
+            &:hover {
+                background-color: darken($brand_color, 5);
+
+                cursor: pointer;
+            }
+        }
+
+        &Delete {
+            height: 100%;
+
+            margin-left: 5px;
+            padding: 5px 10px;
+
+            border: none;
+            border-radius: 5px;
+
+            font-size: 1rem;
+            background-color: $red_1;
+            color: white;
+
+            &:hover {
+                background-color: darken($red_1, 5);
+
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.newTask {
+    width: fit-content;
+
+    margin: 20px auto;
+
+    &Submit {
+        width: 100%;
+
+        padding: 5px 20px;
+
+        border: none;
+        border-radius: 5px;
+        
+        font-size: 1.5rem;
+        background-color: $green_1;
+        color: white;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

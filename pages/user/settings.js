@@ -1,7 +1,7 @@
 import { useUser } from '../../lib/hooks'
 import { useState, useEffect } from 'react'
 
-import styles from '../../styles/tasks.module.scss'
+import styles from '../../styles/settings.module.scss'
 
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
@@ -85,37 +85,42 @@ function Page() {
     }
 
     return (user && tasks ? (
-        <div>
-            <div className={styles.editHeader}>Tasks</div>
-            <div className={styles.edits}>
-                {getSortedTasks().map(task => (
-                    <Task key={task.id} task={task} user={user} tasks={tasks} setTasks={setTasks} categories={categories} />
-                ))}
+        <div className={styles.container}>
+            <div className={styles.setting}>
+                <div className={styles.settingHeader}>Tasks</div>
+                <div className={styles.settingContainer}>
+                    {getSortedTasks().map(task => (
+                        <Task key={task.id} task={task} user={user} tasks={tasks} setTasks={setTasks} categories={categories} />
+                    ))}
+                </div>
+                <form onSubmit={submitNewTask} className={styles.newTask}>
+                    <button type="submit" className={styles.newTaskSubmit}>NEW TASK</button>
+                </form>
             </div>
-            <form onSubmit={submitNewTask} className={styles.newEdit}>
-                <button type="submit" className={styles.newEditSubmit}>ADD NEW TASK</button>
-            </form>
 
-
-            <div className={styles.editHeader}>Categories</div>
-            <div className={styles.edits}>
-                {categories.map(category => (
-                    <Category key={category.id} category={category} user={user} categories={categories} setCategories={setCategories} />
-                ))}
+            <div className={styles.setting}>
+                <div className={styles.settingHeader}>Categories</div>
+                <div className={styles.settingContainer}>
+                    {categories.map(category => (
+                        <Category key={category.id} category={category} user={user} categories={categories} setCategories={setCategories} />
+                    ))}
+                </div>
+                <form onSubmit={submitNewCategory} className={styles.newTask}>
+                    <button type="submit" className={styles.newTaskSubmit}>NEW CATEGORY</button>
+                </form>
             </div>
-            <form onSubmit={submitNewCategory} className={styles.newEdit}>
-                <button type="submit" className={styles.newEditSubmit}>ADD NEW CATEGORY</button>
-            </form>
 
-            <div className={styles.editHeader}>Ratings</div>
-            <div className={styles.edits}>
-                {ratings.map(rating => (
-                    <Rating key={rating.id} rating={rating} user={user} ratings={ratings} setRatings={setRatings} />
-                ))}
+            <div className={styles.setting}>
+                <div className={styles.settingHeader}>Ratings</div>
+                <div className={styles.settingContainer}>
+                    {ratings.map(rating => (
+                        <Rating key={rating.id} rating={rating} user={user} ratings={ratings} setRatings={setRatings} />
+                    ))}
+                </div>
+                <form onSubmit={submitNewRating} className={styles.newTask}>
+                    <button type="submit" className={styles.newTaskSubmit}>NEW RATING</button>
+                </form>
             </div>
-            <form onSubmit={submitNewRating} className={styles.newEdit}>
-                <button type="submit" className={styles.newEditSubmit}>ADD NEW RATING</button>
-            </form>
         </div>
     ) : <div />)
 }
@@ -123,19 +128,10 @@ function Page() {
 function Task({ task, user, tasks, setTasks, categories }) {
     const [name, setName] = useState(task.name)
     const [color, setColor] = useState(task.color)
-    const [changed, setChanged] = useState(false)
-    const [initial, setInitial] = useState(true)
     const [category, setCategory] = useState(task.category)
+    const [editing, setEditing] = useState(false)
 
-    useEffect(() => {
-        if (initial)
-            return setInitial(false)
-        setChanged(true)
-    }, [name, color, category])
-
-    async function onFormSubmit(e) {
-        e.preventDefault()
-
+    async function onSavePress() {
         var newTasks = [...tasks]
         var taskIndex
         for (var i = 0; i < newTasks.length; i++) {
@@ -145,9 +141,9 @@ function Task({ task, user, tasks, setTasks, categories }) {
             }
         }
 
-        newTasks[i].name = name
-        newTasks[i].color = color
-        newTasks[i].category = e.target.category.value ? e.target.category.value : undefined
+        newTasks[taskIndex].name = name
+        newTasks[taskIndex].color = color
+        newTasks[taskIndex].category = category ? category : undefined
 
         await fetch(window.origin + "/api/tasks", {
             body: JSON.stringify({
@@ -157,7 +153,8 @@ function Task({ task, user, tasks, setTasks, categories }) {
             method: "POST"
         })
 
-        setChanged(false)
+        setEditing(false)
+        setTasks(newTasks)
     }
 
     async function onDeletePress() {
@@ -195,33 +192,34 @@ function Task({ task, user, tasks, setTasks, categories }) {
     }
 
     return (
-        <form className={styles.editContainer + (changed ? " " + styles.editChanged : "")} onSubmit={onFormSubmit}>
-            <input type="text" name="title" className={styles.editTitle} value={name} onChange={e => setName(e.target.value)} />
-            <input type="color" name="color" className={styles.editColor} value={color} onChange={e => setColor(e.target.value)} />
-            <select className={styles.editCategory} name="category" value={category} onChange={e => { setCategory(e.target.value) }}>
-                <option value="">Uncategorized</option>
-                {categories.map(category => <option value={category.id}>{category.name}</option>)}
-            </select>
-            <button type="submit" className={styles.editSave}>SAVE</button>
-            <button type="button" className={styles.editDelete} onClick={onDeletePress}>DELETE</button>
-        </form>
+        <>
+            {(editing ? (
+                    <form className={styles.taskEdit}>
+                        <select className={styles.taskEditCategory} name="category" value={category} onChange={e => { setCategory(e.target.value) }}>
+                            <option value="">Uncategorized</option>
+                            {categories.map(category => <option value={category.id}>{category.name}</option>)}
+                        </select>
+                        <input className={styles.taskEditName} type="text" name="title" value={name} onChange={e => setName(e.target.value)} />
+                        <input className={styles.taskEditColor} type="color" name="color" value={color} onChange={e => setColor(e.target.value)} />
+                        <button className={styles.taskEditSave} type="button" onClick={onSavePress}>SAVE</button>
+                        <button className={styles.taskEditDelete} type="button" onClick={onDeletePress}>DELETE</button>
+                    </form>
+            ) : (
+                <div className={styles.taskNormal}>
+                    <div className={styles.taskNormalCategory}>{task.category ? categoryToString(task.category, user) : "NONE"}</div>
+                    <div className={styles.taskNormalName}>{task.name}</div>
+                    <div className={styles.taskNormalEdit} onClick={e => setEditing(true)}>EDIT</div>
+                </div>
+            ))}
+        </>
     )
 }
 
 function Category({ category, user, categories, setCategories }) {
     const [name, setName] = useState(category.name)
-    const [changed, setChanged] = useState(false)
-    const [initial, setInitial] = useState(true)
+    const [editing, setEditing] = useState(false)
 
-    useEffect(() => {
-        if (initial)
-            return setInitial(false)
-        setChanged(true)
-    }, [name])
-
-    async function onFormSubmit(e) {
-        e.preventDefault()
-
+    async function onSavePress() {
         var newCategories = [...categories]
         var categoryIndex
         for (var i = 0; i < newCategories.length; i++) {
@@ -241,7 +239,7 @@ function Category({ category, user, categories, setCategories }) {
             method: "POST"
         })
 
-        setChanged(false)
+        setEditing(false)
     }
 
     async function onDeletePress() {
@@ -279,27 +277,28 @@ function Category({ category, user, categories, setCategories }) {
     }
 
     return (
-        <form className={styles.editContainer + (changed ? " " + styles.editChanged : "")} onSubmit={onFormSubmit}>
-            <input type="text" name="title" className={styles.editTitle} value={name} onChange={e => setName(e.target.value)} />
-            <button type="submit" className={styles.editSave}>SAVE</button>
-            <button type="button" className={styles.editDelete} onClick={onDeletePress}>DELETE</button>
-        </form>
+        <>
+            {(editing ? (
+                    <form className={styles.taskEdit}>
+                        <input className={styles.taskEditName} type="text" name="title" value={name} onChange={e => setName(e.target.value)} />
+                        <button className={styles.taskEditSave} type="button" onClick={onSavePress}>SAVE</button>
+                        <button className={styles.taskEditDelete} type="button" onClick={onDeletePress}>DELETE</button>
+                    </form>
+            ) : (
+                <div className={styles.taskNormal}>
+                    <div className={styles.taskNormalName}>{category.name}</div>
+                    <div className={styles.taskNormalEdit} onClick={e => setEditing(true)}>EDIT</div>
+                </div>
+            ))}
+        </>
     )
 }
 
 function Rating({ rating, user, ratings, setRatings }) {
     const [name, setName] = useState(rating.name)
-    const [changed, setChanged] = useState(false)
-    const [initial, setInitial] = useState(true)
+    const [editing, setEditing] = useState(false)
 
-    useEffect(() => {
-        if (initial)
-            return setInitial(false)
-        setChanged(true)
-    }, [name])
-
-    async function onFormSubmit(e) {
-        e.preventDefault()
+    async function onSavePress() {
 
         var newRatings = [...ratings]
         var ratingIndex
@@ -320,7 +319,7 @@ function Rating({ rating, user, ratings, setRatings }) {
             method: "POST"
         })
 
-        setChanged(false)
+        setEditing(false)
     }
 
     async function onDeletePress() {
@@ -362,11 +361,20 @@ function Rating({ rating, user, ratings, setRatings }) {
     }
 
     return (
-        <form className={styles.editContainer + (changed ? " " + styles.editChanged : "")} onSubmit={onFormSubmit}>
-            <input type="text" name="title" className={styles.editTitle} value={name} onChange={e => setName(e.target.value)} />
-            <button type="submit" className={styles.editSave}>SAVE</button>
-            <button type="button" className={styles.editDelete} onClick={onDeletePress}>DELETE</button>
-        </form>
+        <>
+            {(editing ? (
+                    <form className={styles.taskEdit}>
+                        <input className={styles.taskEditName} type="text" name="title" value={name} onChange={e => setName(e.target.value)} />
+                        <button className={styles.taskEditSave} type="button" onClick={onSavePress}>SAVE</button>
+                        <button className={styles.taskEditDelete} type="button" onClick={onDeletePress}>DELETE</button>
+                    </form>
+            ) : (
+                <div className={styles.taskNormal}>
+                    <div className={styles.taskNormalName}>{rating.name}</div>
+                    <div className={styles.taskNormalEdit} onClick={e => setEditing(true)}>EDIT</div>
+                </div>
+            ))}
+        </>
     )
 }
 
@@ -387,6 +395,14 @@ function generateRandomString(length, user) {
         }
 
         return result;
+    }
+}
+
+function categoryToString(categoryId, user) {
+    for (var category of user.categories) {
+        if (category.id == categoryId) {
+            return category.name
+        }
     }
 }
 
