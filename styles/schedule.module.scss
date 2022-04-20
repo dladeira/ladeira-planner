@@ -5,76 +5,10 @@
     flex-direction: column;
 
     height: 100%;
-    width: 90%;
+    width: 97%;
 
     margin: 0 auto;
-    padding-top: 10px;
-}
-
-.weekNumber {
-    &Container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-
-        height: 3rem;
-        width: 95%;
-
-        margin: 0 auto;
-
-        font-weight: 300;
-        font-size: 2rem;
-        text-align: center;
-        color: $weekDay_color;
-    }
-
-    &Bar {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        height: 3rem;
-    }
-
-    &Text {
-        @extend .weekNumberBar;
-
-        width: 100%;
-    }
-
-    &Arrow {
-        @extend .weekNumberBar;
-
-        &Left {
-            @extend .weekNumberArrow;
-            margin-right: 20px;
-        }
-
-        &Right {
-            @extend .weekNumberArrow;
-            margin-left: 20px;
-        }
-
-        &Text {
-            height: fit-content;
-            width: fit-content;
-
-            margin-bottom: 5px;
-
-            font-size: 3rem;
-        }
-
-        &:hover {
-            color: rgb(90, 90, 90);
-
-            cursor: pointer;
-        }
-
-        user-select: none;
-        width: 80px;
-    }
+    padding-top: 40px;
 }
 
 .weekDays {
@@ -87,8 +21,6 @@
     width: 100%;
 
     margin: 0 auto;
-
-    background-color: $weekDay_background;
     
     overflow-y: hidden;
 }

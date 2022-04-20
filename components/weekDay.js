@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react'
 
+import { useAppContext } from '../lib/context'
+
 import styles from '../styles/weekDay.module.scss'
 
 function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear, disabled }) {
+    const [context, setContext] = useAppContext()
+
     if (disabled) {
         return (
-            <div className={styles.weekDay}>
-                <div className={styles.weekDayTitleDisabled}>{weekDay}</div>
+            <div className={styles.container}>
+                <div className={styles.title}>
+                    <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDay}</div>
+                </div>
                 <div className={styles.weekDayTasksDisabled}>
                 </div>
             </div>
@@ -32,15 +38,142 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
         setDayIndex(undefined)
     }, [currentWeek])
 
-    function addTaskToDay(e) {
-        e.preventDefault()
+    function getSortedRecordedTasks() {
+        var sorted = tasks.sort((a, b) => getTask(a.taskId, user).name.localeCompare(getTask(b.taskId, user).name))
 
+        return sorted
+    }
+
+    return (
+
+        <div className={styles.container + " " + styles.activeDay}>
+            <div className={styles.title}>
+                <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDay}</div>
+                <div className={styles.titleDate}>{getDateText(weekDayIndex, context.week, context.year)}</div>
+            </div>
+
+            <div className={styles.tasks}>
+
+                <Lines count={100} thickOffset={4} />
+
+                {getSortedRecordedTasks().map(task => {
+                    if (task) {
+                        return <div>
+                            <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
+                        </div>
+                    }
+                })}
+
+                <AddNew user={user} setDayIndex={setDayIndex} setTasks={setTasks} dayIndex={dayIndex} />
+            </div>
+
+            {weekDayIndex == 0 ? <RatingHeader user={user} /> : <div />}
+            <Ratings user={user} weekDay={weekDayIndex} />
+        </div>
+    )
+}
+
+function Lines({ count, thickOffset }) {
+    var counter = 0
+
+    return (
+        <div className={styles.lines}>{Array.from(Array(count)).map(() => {
+            counter++
+            if (counter % thickOffset == 0)
+                return <div className={styles.thickLine} />
+            else
+                return <div className={styles.line} />
+        })}</div>
+    )
+}
+
+function RatingHeader({ user }) {
+    return (
+        <div className={styles.headerWrapper}>
+            <div className={styles.headerContainer}>
+                {user.ratings.map(rating => <div className={styles.header}>{rating.name[0]}</div>)}
+            </div>
+        </div>
+
+    )
+}
+
+function Ratings({ user, weekDay }) {
+    const [context, setContext] = useAppContext()
+
+    return (
+        <div className={styles.ratings}>
+            {user.ratings.map(rating =>
+                <Rating rating={rating} user={user} day={getDay(user, weekDay, context.week, context.year)} selectedData={{ day: weekDay, week: context.week, year: context.year }} />
+            )}
+        </div>
+    )
+}
+
+function Rating({ rating, user, day, selectedData }) {
+    const [ratingCount, setRatingCount] = useState(getDefaultRating())
+
+    function setRating(newRating) {
+        if (newRating == ratingCount) // Reset rating
+            return setRating(0)
+
+        setRatingCount(newRating)
+
+        var newDays = [...user.days]
+        var dayIndex = newDays.indexOf(day)
+
+        if (dayIndex >= 0) {
+            if (!newDays[dayIndex].ratings) {
+                newDays[dayIndex].ratings = {}
+            }
+        } else {
+            newDays.push({ currentYear: selectedData.year, week: selectedData.week, day: selectedData.day, tasks: [], ratings: {} })
+            dayIndex = newDays.length - 1
+        }
+
+        newDays[dayIndex].ratings[rating.id] = newRating
+
+        fetch(window.origin + "/api/days", {
+            body: JSON.stringify({
+                email: user.email,
+                days: newDays
+            }),
+            method: "POST"
+        })
+    }
+
+    function getDefaultRating() {
+        if (day) {
+            if (day.ratings) {
+                if (day.ratings[rating.id]) {
+                    return day.ratings[rating.id]
+                }
+            }
+        }
+
+        return 0
+    }
+    return (
+        <div className={styles.rating}>
+            <div className={styles.star} onClick={() => setRating(1)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 0 ? "fas" : "far")} fa-star"></i>` }} />
+            <div className={styles.star} onClick={() => setRating(2)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 1 ? "fas" : "far")} fa-star"></i>` }} />
+            <div className={styles.star} onClick={() => setRating(3)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 2 ? "fas" : "far")} fa-star"></i>` }} />
+            <div className={styles.star} onClick={() => setRating(4)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 3 ? "fas" : "far")} fa-star"></i>` }} />
+            <div className={styles.star} onClick={() => setRating(5)} dangerouslySetInnerHTML={{ __html: `<i class="${(ratingCount > 4 ? "fas" : "far")} fa-star"></i>` }} />
+        </div >
+    )
+}
+
+function AddNew({ user, setDayIndex, setTasks, dayIndex }) {
+    const [addTask] = useState("default")
+
+    function addTaskToDay(task) {
         var newDays = user.days
         var newDayIndex = dayIndex
 
         if (dayIndex != undefined) {
             newDays[dayIndex].tasks.push({
-                taskId: e.target.taskId.value,
+                taskId: task,
                 time: 1
             })
         } else {
@@ -48,7 +181,7 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
                 week: currentWeek,
                 day: weekDayIndex,
                 tasks: [{
-                    taskId: e.target.taskId.value,
+                    taskId: task,
                     time: 1
                 }],
                 currentYear: currentYear
@@ -69,54 +202,37 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
         setTasks([...newDays[newDayIndex].tasks])
     }
 
-    function canAddNewTask() {
-        return user.tasks.filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).length > 0
-    }
-
-    function getSortedRecordedTasks() {
-        var sorted = tasks.sort((a, b) => getTask(a.taskId, user).name.localeCompare(getTask(b.taskId, user).name))
-
-        return sorted
-    }
-
     function getSortedTasks() {
         var sorted = user.tasks.sort((a, b) => a.name.localeCompare(b.name))
 
         return sorted
     }
 
+    function onSelect(e) {
+        if (e.target.value !== "") {
+            addTaskToDay(e.target.value)
+        }
+    }
+
     return (
-
-        <div className={styles.weekDay}>
-            <div className={today ? styles.weekDayTitleToday : styles.weekDayTitle}>{weekDay}</div>
-            <div className={styles.weekDayTasks}>
-                {getSortedRecordedTasks().map(task => {
-                    if (task) {
-                        return <div>
-                            <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
-                        </div>
-                    }
+        <div className={styles.addContainer}>
+            <select className={styles.addSelect} name="taskId" value={addTask} onChange={onSelect}>
+                <option default value="">Add task</option>
+                {getSortedTasks().filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
+                    return <option value={task.id}>{task.name}</option>
                 })}
-            </div>
-            <form className={styles.weekDayAddNew} onSubmit={addTaskToDay}>
-
-                <select className={styles.addNewTask} name="taskId">
-                    {getSortedTasks().filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
-                        return <option value={task.id}>{task.name}</option>
-                    })}
-                </select>
-                <button className={canAddNewTask() ? styles.addNewSubmit : styles.addNewSubmitDisabled} type="submit" disabled={!canAddNewTask()}>ADD</button>
-            </form>
+            </select>
         </div>
     )
 }
+
 
 function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     var tracking = false
     var pageY = -1
     var diff = 0
-    var quarterToPixelRatio = 50
-    var height = defaultTask.time * quarterToPixelRatio
+    var hourToPixelRatio = 50
+    var height = defaultTask.time * hourToPixelRatio
     var elementId = defaultTask.taskId + "-" + user.days[dayIndexInUser].day + "-" + user.days[dayIndexInUser].week
 
     function increaseTaskTime(amount) {
@@ -175,7 +291,7 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
 
             tracking = false
             pageY = -1
-            increaseTaskTime(diff / quarterToPixelRatio)
+            increaseTaskTime(diff / hourToPixelRatio)
             diff = 0
         }
     }
@@ -186,8 +302,8 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     }
 
     function updateHeight() {
-        document.getElementById(elementId).style.height = ((parseFloat(defaultTask.time) + parseFloat(roundToFourth(diff / quarterToPixelRatio))) * quarterToPixelRatio) + "px"
-        document.getElementById(elementId + "_time").innerHTML = roundToFourth((parseFloat(defaultTask.time) + (diff / quarterToPixelRatio))) > 0 ? roundToFourth((parseFloat(defaultTask.time) + (diff / quarterToPixelRatio))) + "h" : "REMOVE"
+        document.getElementById(elementId).style.height = ((parseFloat(defaultTask.time) + parseFloat(roundToFourth(diff / hourToPixelRatio))) * hourToPixelRatio) + "px"
+        document.getElementById(elementId + "_time").innerHTML = roundToFourth((parseFloat(defaultTask.time) + (diff / hourToPixelRatio))) > 0 ? roundToFourth((parseFloat(defaultTask.time) + (diff / hourToPixelRatio))) + "h" : "REMOVE"
     }
 
     return (
@@ -208,6 +324,20 @@ function getTask(id, user) {
         if (user.tasks[i].id == id)
             return user.tasks[i]
     }
+}
+
+function getDay(user, day, week, year) {
+    for (var selectedDay of user.days) {
+        if (selectedDay.week == week && selectedDay.day == day && selectedDay.currentYear == year) {
+            return selectedDay
+        }
+    }
+}
+
+function getDateText(day, week, year) {
+    var days = week > 0 ? (week - 1) * 7 + day : day;
+    var date = new Date(((year - 1970) * 31536000000) + (days * 24 * 60 * 60 * 1000))
+    return String(date.getDate()).padStart(2, '0') + "." + String(date.getMonth()).padStart(2, '0')
 }
 
 export default WeekDay

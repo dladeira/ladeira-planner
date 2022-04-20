@@ -1,25 +1,22 @@
-import { useUser } from '../../lib/hooks'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { Doughnut } from 'react-chartjs-2'
+
+import { useUser } from '../../lib/hooks'
+import { useAppContext } from '../../lib/context'
 
 import styles from '../../styles/overview.module.scss'
 
 const date = new Date()
-
 const chartOptions = {
     cutout: 150,
 }
 
 function Page() {
     const user = useUser({ redirectTo: '/api/login' })
-    const currentWeek = date.getCurrentWeek()
+    const [context, setContext] = useAppContext()
 
     return (user ? (
         <div className={styles.container}>
-            <div className={styles.weekHeader}>
-                WEEK {currentWeek}
-            </div>
-
             <div className={styles.main}>
                 <div className={styles.chart}>
                     <Doughnut data={getChartData(user)} width={10} height={10} options={chartOptions} />
@@ -27,7 +24,7 @@ function Page() {
 
                 <div className={styles.thisWeekContainer}>
                     <div className={styles.thisWeekHours}>
-                        {Math.round(getHoursInWeek(user, currentWeek, date.getFullYear()))}
+                        {Math.round(getHoursInWeek(user, context.week, date.getFullYear()))}
                     </div>
                     <div className={styles.thisWeekSubtitle}>
                         Hours this week
@@ -42,10 +39,57 @@ function Page() {
             </div>
         </div>
     ) : <div />)
+
+    function getChartData(user) {
+        const tasks = getTasksInWeek(user, context.week, context.year)
+        var labels = []
+        var data = []
+        var backgroundColor = []
+
+        if (tasks.length > 0) {
+            for (var task of tasks) {
+                var exists = false
+                var dataIndex = -1
+                var name = getTask(task.taskId, user).name
+
+                for (var labelIndex in labels) {
+                    if (labels[labelIndex] == name) {
+                        exists = true
+                        dataIndex = labelIndex
+                    }
+                }
+
+                if (!exists) {
+                    labels.push(name)
+                    backgroundColor.push(getTask(task.taskId, user).color)
+                    data.push(task.time)
+                } else {
+                    data[dataIndex] += task.time
+                }
+            }
+        } else {
+            labels.push("NONE")
+            backgroundColor.push("gray")
+            data.push(1)
+        }
+
+        var data = {
+            labels: labels,
+            datasets: [
+                {
+                    data: data,
+                    backgroundColor: backgroundColor
+                }
+            ]
+        }
+
+        return data
+    }
 }
 
 function CategoryMenu({ user, category }) {
-
+    const [context, setContext] = useAppContext()
+    
     return (
         <div className={styles.category}>
             <div className={styles.categoryHeader}>{category.name}</div>
@@ -59,10 +103,10 @@ function CategoryMenu({ user, category }) {
     )
 
     function getCategoryTask(task) {
-        var thisWeek = getHoursInWeekForTask(user, date.getCurrentWeek(), date.getFullYear(), task.id)
+        var thisWeek = getHoursInWeekForTask(user, context.week, date.getFullYear(), task.id)
         var lastWeek
-        if (date.getCurrentWeek() - 1 > 0)
-            lastWeek = getHoursInWeekForTask(user, date.getCurrentWeek() - 1, date.getFullYear(), task.id)
+        if (context.week - 1 > 0)
+            lastWeek = getHoursInWeekForTask(user, context.week - 1, date.getFullYear(), task.id)
         else
             lastWeek = getHoursInWeekForTask(user, getWeeksInYear(date.getFullYear() - 1), date.getFullYear() - 1, task.id)
 
@@ -70,57 +114,11 @@ function CategoryMenu({ user, category }) {
         return (<div className={styles.task}>
             <div className={styles.taskKey}>{task.name}</div>
             <div className={styles.taskValue}>
-                <div className={styles.taskHours}>{getHoursInWeekForTask(user, date.getCurrentWeek(), date.getFullYear(), task.id)}</div>
+                <div className={styles.taskHours}>{getHoursInWeekForTask(user, context.week, date.getFullYear(), task.id)}</div>
                 (<span style={{ color: getPercentDifference(thisWeek, lastWeek) > 0 ? "green" : "red" }}>{getPercentDifference(thisWeek, lastWeek)}%</span>)
             </div>
         </div>)
     }
-}
-
-function getChartData(user) {
-    const tasks = getTasksInWeek(user, date.getCurrentWeek(), date.getFullYear())
-    var labels = []
-    var data = []
-    var backgroundColor = []
-
-    if (tasks.length > 0) {
-        for (var task of tasks) {
-            var exists = false
-            var dataIndex = -1
-            var name = getTask(task.taskId, user).name
-
-            for (var labelIndex in labels) {
-                if (labels[labelIndex] == name) {
-                    exists = true
-                    dataIndex = labelIndex
-                }
-            }
-
-            if (!exists) {
-                labels.push(name)
-                backgroundColor.push(getTask(task.taskId, user).color)
-                data.push(task.time)
-            } else {
-                data[dataIndex] += task.time
-            }
-        }
-    } else {
-        labels.push("NONE")
-        backgroundColor.push("gray")
-        data.push(1)
-    }
-
-    var data = {
-        labels: labels,
-        datasets: [
-            {
-                data: data,
-                backgroundColor: backgroundColor
-            }
-        ]
-    }
-
-    return data
 }
 
 function getHoursInWeekForTask(user, currentWeek, currentYear, taskId) {

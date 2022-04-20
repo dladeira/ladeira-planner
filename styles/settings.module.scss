@@ -40,9 +40,9 @@
     align-items: center;
 
     height: 35px;
-    width: 90%;
 
-    margin: 5px auto;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
 
     &Normal {
         @extend .task;
@@ -54,7 +54,7 @@
             
             height: 30px;
 
-            width: 100px;
+            width: 150px;
 
             padding-left: 4px;
 
@@ -67,7 +67,7 @@
             display: block;
 
             height: 25px;
-            width: 300px;
+            width: 250px;
 
             font-size: 1rem;
             color: $font_color_1;
@@ -75,7 +75,8 @@
 
         &Edit {
             margin-left: 5px;
-            padding: 5px 10px;
+            margin-bottom: 10px;
+            padding: 3px 10px;
 
             border-radius: 5px;
 

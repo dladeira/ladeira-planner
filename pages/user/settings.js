@@ -18,9 +18,32 @@ function Page() {
     }, [user])
 
     function getSortedTasks() {
-        var sorted = tasks.sort((a, b) => a.name.localeCompare(b.name))
+        var taskCategories = { "NONE": []}
 
-        return sorted
+        for (var task of tasks) {
+            if (task.category) {
+                if (taskCategories[task.category]) {
+                    taskCategories[task.category].push(task)
+                } else {
+                    taskCategories[task.category] = [task]
+                }
+            } else {
+                taskCategories["NONE"].push(task)
+            }
+        }
+        for (var category in taskCategories) {
+            taskCategories[category] = taskCategories[category].sort((a, b) => a.name.localeCompare(b.name))
+        }
+
+        var allTasks = []
+
+        for (var category in taskCategories) {
+            for (var task of taskCategories[category]) {
+                allTasks.push(task)
+            }
+        }
+
+        return allTasks
     }
 
     function submitNewTask(e) {
@@ -196,7 +219,7 @@ function Task({ task, user, tasks, setTasks, categories }) {
             {(editing ? (
                     <form className={styles.taskEdit}>
                         <select className={styles.taskEditCategory} name="category" value={category} onChange={e => { setCategory(e.target.value) }}>
-                            <option value="">Uncategorized</option>
+                            <option value="">NONE</option>
                             {categories.map(category => <option value={category.id}>{category.name}</option>)}
                         </select>
                         <input className={styles.taskEditName} type="text" name="title" value={name} onChange={e => setName(e.target.value)} />
@@ -205,7 +228,7 @@ function Task({ task, user, tasks, setTasks, categories }) {
                         <button className={styles.taskEditDelete} type="button" onClick={onDeletePress}>DELETE</button>
                     </form>
             ) : (
-                <div className={styles.taskNormal}>
+                <div className={styles.taskNormal} style={{borderBottom: "solid 2px " + task.color}}>
                     <div className={styles.taskNormalCategory}>{task.category ? categoryToString(task.category, user) : "NONE"}</div>
                     <div className={styles.taskNormalName}>{task.name}</div>
                     <div className={styles.taskNormalEdit} onClick={e => setEditing(true)}>EDIT</div>

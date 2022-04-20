@@ -13,19 +13,6 @@
     padding: 10px 10px;
 }
 
-.weekHeader {
-    height: fit-content;
-    width: fit-content;
-
-    margin-right: auto;
-    padding: 0 20px;
-
-    border-bottom: 2px solid $font_color_2;
-
-    font-size: 2rem;
-    color: $font_color_1;
-}
-
 .main {
     display: flex;
     flex-direction: row;
@@ -46,6 +33,8 @@
 
 .thisWeek {
     &Container {
+        width: 23rem;
+
         margin-right: 150px;
         padding-bottom: 100px;
     }
@@ -87,9 +76,10 @@
     &Header {
         padding-bottom: 5px;
 
-        border-bottom: 2px solid $font_color_2;
+        border-bottom: 2px solid $font_color_1;
 
-        font-size: 2rem;
+        font-size: 1.8rem;
+        font-weight: bold;
         text-align: center;
         color: black;
     }
@@ -112,7 +102,7 @@
 
     padding: 5px 0;
 
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: $font_color_1;
 
     &Value {

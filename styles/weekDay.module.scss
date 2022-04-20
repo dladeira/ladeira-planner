@@ -1,69 +1,61 @@
 @import "./variables.scss";
 
-.weekDay {
+.container {
+    position: relative;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
 
+    height: 98%;
+    width: 100%;
+
+    margin: 0 20px;
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    width: 100%;
+
+    margin-bottom: 30px;
+    padding-bottom: 2px;
+
+    border-bottom: 3px solid $weekDay_divider;
+
+    font-weight: bold;
+
+    &WeekDay {
+        font-size: 1.5rem;
+        color: $weekDay_color;
+
+        &Today {
+            @extend .titleWeekDay;
+            color: $brand_color;
+        }
+    }
+
+    &Date {
+        font-size: 1.3rem;
+        color: $font_color_1;
+    }
+}
+
+.tasks {
+    position: relative;
+
     height: 100%;
     width: 100%;
 
-    margin: 0 10px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 
-    box-sizing: border-box;
-
-    &Title {
-        width: 100%;
-
-        padding-top: 20px;
-        padding-bottom: 10px;
-
-        font-size: 2.1rem;
-        text-align: center;
-        color: $weekDay_color;
-
-        border-bottom: 2px solid $weekDay_divider;
-
-        &Today {
-            @extend .weekDayTitle;
-
-            font-weight: bold;
-        }
-
-        &Disabled {
-            @extend .weekDayTitle;
-
-            background-color: lighten($weekDay_background, 3);
-            color: lighten($weekDay_color, 30);
-        }
-    }
-
-    &Tasks {
-        height: 100%;
-        width: 100%;
-
-        padding: 10px;
-
-        overflow-y: scroll;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    &AddNew {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-
-        height: 130px;
-        width: 100%;
-
-        margin-top: 20px;
-        padding: 13px 12px;
+    &::-webkit-scrollbar {
+        display: none;
     }
 }
 
@@ -74,14 +66,14 @@
     justify-content: center;
     align-items: center;
 
-    margin: 10px 0;
-    padding-top: 20px;
-    padding-bottom: 34px;
+    margin-bottom: 12.5px;
+    padding-top: 18px;
+    padding-bottom: 32px;
 
     border-radius: 5px;
 
     color: white;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.608);
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.256);
 
     &Time {
         font-size: 1rem;
@@ -121,39 +113,121 @@
     box-sizing: content-box;
 }
 
-.addNew {
-    &Task {
-        width: 90%;
+.activeDay:hover .addContainer {
+    opacity: 1;
+}
 
-        border: none;
-        outline: none;
+.addContainer {
+    opacity: 0;
 
-        font-size: 1.6rem;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.508);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100px;
+
+    border: 3px $font_color_2 dashed;
+    border-radius: 5px;
+
+    background-color: rgba(#F1F1F1, 0.7);
+
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.237);
+}
+
+.addSelect {
+    height: 100%;
+    width: 100%;
+
+    border: none;
+
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    background-color: transparent;
+    color: $font_color_1;
+
+    &:hover {
+        cursor: pointer;
     }
+}
 
-    &Submit {
-        width: 90%;
+.lines {
+    position: absolute;
 
-        padding: 2px 7px;
+    height: calc(100% - 10px);
+    width: 100%;
 
-        border: none;
-        border-radius: 2px;
-        outline: none;
+    overflow-y: hidden;
+}
 
-        font-size: 1rem;
-        background-color: rgb(245, 245, 245);
-        color: $weekDay_color;
+.line {
+    height: 1px;
+    width: 100%;
 
-        &:hover {
-            background-color: darken(rgb(245, 245, 245), 4);
+    margin-bottom: 11.5px;
 
-            cursor: pointer;
-        }
+    background-color: rgba($font_color_2, 0.2);
+}
 
-        &Disabled {
-            opacity: 0;
-        }
-    }
+.thickLine {
+    @extend .line;
+
+    background-color: $font_color_2;
+}
+
+.headerWrapper {
+    height: 0px;
+    position: relative;
+}
+
+.headerContainer {
+    position: absolute;
+    left: -20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 100px;
+
+    margin-top: 10px;
+}
+
+.header {
+    margin: 1.5px 0;
+
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: $font_color_2;
+
+    user-select: none;
+}
+
+.ratings {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 100%;
+
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    width: 9rem;
+
+    margin: 1px;
+}
+
+.star:hover {
+    cursor: pointer;
 }

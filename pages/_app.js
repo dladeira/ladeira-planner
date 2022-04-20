@@ -1,12 +1,16 @@
-import '../styles/global.scss'
 import Layout from '../components/layout'
+import { AppWrapper } from '../lib/context'
+
+import '../styles/global.scss'
 
 export default function App({ Component, pageProps }) {
 
     return (
-        <Layout>
-            <Component {...pageProps} />
-        </Layout>
+        <AppWrapper>
+            <Layout>
+                <Component {...pageProps} />
+            </Layout>
+        </AppWrapper>
     )
 }
 
