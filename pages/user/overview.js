@@ -115,7 +115,7 @@ function CategoryMenu({ user, category }) {
             <div className={styles.taskKey}>{task.name}</div>
             <div className={styles.taskValue}>
                 <div className={styles.taskHours}>{getHoursInWeekForTask(user, context.week, date.getFullYear(), task.id)}</div>
-                (<span style={{ color: getPercentDifference(thisWeek, lastWeek) > 0 ? "green" : "red" }}>{getPercentDifference(thisWeek, lastWeek)}%</span>)
+                (<span style={{ color: getPercentDifference(lastWeek, thisWeek) > 0 ? "green" : "red" }}>{getPercentDifference(lastWeek, thisWeek)}%</span>)
             </div>
         </div>)
     }
@@ -182,11 +182,11 @@ function getPercentDifference(num1, num2) {
     }
 
     if (num1 <= 0) {
-        return -num2 * 100
+        return num2 * 100
     }
 
-    var increase = num1 - num2
-    return Math.round(increase / num1 * 100)
+    var increase = num2 - num1
+    return Math.round(increase / (num1) * 100)
 }
 
 export default Page
