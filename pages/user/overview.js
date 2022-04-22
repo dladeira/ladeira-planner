@@ -8,7 +8,7 @@ import styles from '../../styles/overview.module.scss'
 
 const date = new Date()
 const chartOptions = {
-    cutout: 150,
+    cutout: "65%",
 }
 
 function Page() {
@@ -111,7 +111,7 @@ function CategoryMenu({ user, category }) {
             lastWeek = getHoursInWeekForTask(user, getWeeksInYear(date.getFullYear() - 1), date.getFullYear() - 1, task.id)
 
 
-        return (<div className={styles.task}>
+        return (<div key={task.id} className={styles.task}>
             <div className={styles.taskKey}>{task.name}</div>
             <div className={styles.taskValue}>
                 <div className={styles.taskHours}>{getHoursInWeekForTask(user, context.week, date.getFullYear(), task.id)}</div>

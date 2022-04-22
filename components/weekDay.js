@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useAppContext } from '../lib/context'
 
 import styles from '../styles/weekDay.module.scss'
 
-function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear, disabled }) {
+function WeekDay({ weekDay, weekDayIndex, user, today, disabled }) {
+    const [dayIndex, setDayIndex] = useState()
+    const [tasks, setTasks] = useState([])
     const [context, setContext] = useAppContext()
 
     if (disabled) {
@@ -19,14 +21,11 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
         )
     }
 
-    var [dayIndex, setDayIndex] = useState()
-    var [tasks, setTasks] = useState([])
-
     useEffect(() => {
         for (var i = 0; i < user.days.length; i++) {
             var day = user.days[i]
             if (day) {
-                if (day.week == currentWeek && day.day == weekDayIndex && day.currentYear == currentYear) {
+                if (day.week == context.week && day.day == weekDayIndex && day.currentYear == context.year) {
                     setDayIndex(i)
                     setTasks(user.days[i].tasks)
                     return
@@ -36,7 +35,8 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
 
         setTasks([])
         setDayIndex(undefined)
-    }, [currentWeek])
+
+    }, [setTasks, setDayIndex])
 
     function getSortedRecordedTasks() {
         var sorted = tasks.sort((a, b) => getTask(a.taskId, user).name.localeCompare(getTask(b.taskId, user).name))
@@ -45,7 +45,6 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
     }
 
     return (
-
         <div className={styles.container + " " + styles.activeDay}>
             <div className={styles.title}>
                 <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDay}</div>
@@ -58,16 +57,14 @@ function WeekDay({ weekDay, weekDayIndex, user, currentWeek, today, currentYear,
 
                 {getSortedRecordedTasks().map(task => {
                     if (task) {
-                        return <div>
-                            <Task key={task.taskId + "-" + weekDayIndex + "-" + currentWeek} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
-                        </div>
+                        return <Task key={task.taskId + "-" + weekDayIndex + "-" + context.week} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
                     }
                 })}
 
-                <AddNew user={user} setDayIndex={setDayIndex} setTasks={setTasks} dayIndex={dayIndex} />
+                <AddNew user={user} setDayIndex={setDayIndex} setTasks={setTasks} dayIndex={dayIndex} weekDayIndex={weekDayIndex} />
             </div>
 
-            {weekDayIndex == 0 ? <RatingHeader user={user} /> : <div />}
+            {weekDayIndex == 0 ? <RatingHeader user={user} weekDay={weekDayIndex} /> : <div />}
             <Ratings user={user} weekDay={weekDayIndex} />
         </div>
     )
@@ -80,18 +77,18 @@ function Lines({ count, thickOffset }) {
         <div className={styles.lines}>{Array.from(Array(count)).map(() => {
             counter++
             if (counter % thickOffset == 0)
-                return <div className={styles.thickLine} />
+                return <div key={counter} className={styles.thickLine} />
             else
-                return <div className={styles.line} />
+                return <div key={counter} className={styles.line} />
         })}</div>
     )
 }
 
-function RatingHeader({ user }) {
+function RatingHeader({ user, weekDay }) {
     return (
         <div className={styles.headerWrapper}>
             <div className={styles.headerContainer}>
-                {user.ratings.map(rating => <div className={styles.header}>{rating.name[0]}</div>)}
+                {user.ratings.map(rating => <div key={weekDay + "-" + rating.name[0]} className={styles.header}>{rating.name[0]}</div>)}
             </div>
         </div>
 
@@ -104,7 +101,7 @@ function Ratings({ user, weekDay }) {
     return (
         <div className={styles.ratings}>
             {user.ratings.map(rating =>
-                <Rating rating={rating} user={user} day={getDay(user, weekDay, context.week, context.year)} selectedData={{ day: weekDay, week: context.week, year: context.year }} />
+                <Rating key={weekDay + "-" + rating.id} rating={rating} user={user} day={getDay(user, weekDay, context.week, context.year)} selectedData={{ day: weekDay, week: context.week, year: context.year }} />
             )}
         </div>
     )
@@ -164,7 +161,8 @@ function Rating({ rating, user, day, selectedData }) {
     )
 }
 
-function AddNew({ user, setDayIndex, setTasks, dayIndex }) {
+function AddNew({ user, setDayIndex, setTasks, dayIndex, weekDayIndex }) {
+    const [context, setContext] = useAppContext()
     const [addTask] = useState("default")
 
     function addTaskToDay(task) {
@@ -178,13 +176,13 @@ function AddNew({ user, setDayIndex, setTasks, dayIndex }) {
             })
         } else {
             newDays.push({
-                week: currentWeek,
+                week: context.week,
                 day: weekDayIndex,
                 tasks: [{
                     taskId: task,
                     time: 1
                 }],
-                currentYear: currentYear
+                currentYear: context.year
             })
 
             newDayIndex = newDays.length - 1
@@ -194,7 +192,7 @@ function AddNew({ user, setDayIndex, setTasks, dayIndex }) {
         fetch(window.origin + "/api/days", {
             body: JSON.stringify({
                 email: user.email,
-                days: newDays
+                days: [...newDays]
             }),
             method: "POST"
         })
@@ -219,7 +217,7 @@ function AddNew({ user, setDayIndex, setTasks, dayIndex }) {
             <select className={styles.addSelect} name="taskId" value={addTask} onChange={onSelect}>
                 <option default value="">Add task</option>
                 {getSortedTasks().filter(task => dayIndex == undefined || user.days[dayIndex].tasks.filter(i => i.taskId == task.id).length == 0).map(task => {
-                    return <option value={task.id}>{task.name}</option>
+                    return <option key={task.id} value={task.id}>{task.name}</option>
                 })}
             </select>
         </div>

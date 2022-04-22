@@ -15,7 +15,7 @@ function Component() {
                     </a>
                 </Link>
             </div>
-            <div className={styles.linkContainer}>
+            {/* <div className={styles.linkContainer}>
                 <Link href={"/"}>
                     <a className={styles.link} draggable="false">
                         Features
@@ -31,7 +31,7 @@ function Component() {
                         About us
                     </a>
                 </Link>
-            </div>
+            </div> */}
             <Link href={user ? "/api/logout" : "/api/login"}>
                 <a className={user ? styles.authLogout : styles.authLogin} draggable="false">
                     {user ? "Logout" : "Login"}

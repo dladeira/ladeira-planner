@@ -13,8 +13,6 @@ function Page() {
     var date = new Date()
     const [tasks, setTasks] = useState()
     const [context, setContext] = useAppContext()
-    var selectedWeek = context.week
-    var selectedYear = context.year
 
     useEffect(() => {
         if (user) {
@@ -26,10 +24,10 @@ function Page() {
         <div className={styles.container}>
             <div className={styles.weekDays}>
                 {weekDays.map(weekDay => {
-                    if (isInYear(selectedYear, selectedWeek, weekDays.indexOf(weekDay)))
-                        return <WeekDay weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == selectedWeek && weekDays.indexOf(weekDay) == getWeekDay(date) && selectedYear == date.getFullYear()} currentWeek={selectedWeek} currentYear={selectedYear} />
+                    if (isInYear(context.year, context.week, weekDays.indexOf(weekDay)))
+                        return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(date) && context.year == date.getFullYear()} />
                     else
-                        return <WeekDay weekDay={weekDay} disabled={true} />
+                        return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />
                 }
                 )}
             </div>

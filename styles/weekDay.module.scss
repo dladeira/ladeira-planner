@@ -9,9 +9,7 @@
     align-items: flex-start;
 
     height: 98%;
-    width: 100%;
-
-    margin: 0 20px;
+    width: 12%;
 }
 
 .title {
@@ -30,7 +28,7 @@
     font-weight: bold;
 
     &WeekDay {
-        font-size: 1.5rem;
+        font-size: 1.2vw;
         color: $weekDay_color;
 
         &Today {
@@ -40,7 +38,7 @@
     }
 
     &Date {
-        font-size: 1.3rem;
+        font-size: 1vw;
         color: $font_color_1;
     }
 }
@@ -190,7 +188,7 @@
     justify-content: space-evenly;
     align-items: center;
 
-    height: 100px;
+    height: 72px;
 
     margin-top: 10px;
 }
@@ -198,7 +196,7 @@
 .header {
     margin: 1.5px 0;
 
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     font-weight: 900;
     color: $font_color_2;
 
