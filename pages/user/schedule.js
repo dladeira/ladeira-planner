@@ -25,7 +25,7 @@ function Page() {
             <div className={styles.weekDays}>
                 {weekDays.map(weekDay => {
                     if (isInYear(context.year, context.week, weekDays.indexOf(weekDay)))
-                        return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(date) && context.year == date.getFullYear()} />
+                        return <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDays.indexOf(weekDay)} weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(date) && context.year == date.getFullYear()} />
                     else
                         return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />
                 }
