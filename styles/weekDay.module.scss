@@ -237,6 +237,14 @@
     margin: 1px;
 }
 
+.star {
+    height: 22px;
+    width: 18px;
+
+    font-size: 1rem;
+    color: $font_color_1;
+}
+
 .star:hover {
     cursor: pointer;
 }
