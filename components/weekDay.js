@@ -75,8 +75,7 @@ function Lines({ count, thickOffset }) {
 
     return (
         <div className={styles.lines}>{Array.from(Array(count)).map(() => {
-            counter++
-            if (counter % thickOffset == 0)
+            if (counter++ % thickOffset == 0)
                 return <div key={counter} className={styles.thickLine} />
             else
                 return <div key={counter} className={styles.line} />
@@ -229,7 +228,7 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
     var tracking = false
     var pageY = -1
     var diff = 0
-    var hourToPixelRatio = 50
+    var hourToPixelRatio = 100
     var height = defaultTask.time * hourToPixelRatio
     var elementId = defaultTask.taskId + "-" + user.days[dayIndexInUser].day + "-" + user.days[dayIndexInUser].week
 
@@ -304,12 +303,20 @@ function Task({ defaultTask, dayIndexInUser, setTasks, user }) {
         document.getElementById(elementId + "_time").innerHTML = roundToFourth((parseFloat(defaultTask.time) + (diff / hourToPixelRatio))) > 0 ? roundToFourth((parseFloat(defaultTask.time) + (diff / hourToPixelRatio))) + "h" : "REMOVE"
     }
 
-    return (
-        <div id={elementId} className={styles.task} style={{ height: height, backgroundColor: getTask(defaultTask.taskId, user).color }}>
-            <div id={elementId + "_time"} className={styles.taskTime}>{defaultTask.time}h</div>
-            <div className={styles.taskName}>{getTask(defaultTask.taskId, user).name}</div>
-            <div draggable={false} onMouseDown={clickHandler} className={styles.taskBottom}></div>
-        </div>
+    return (height > hourToPixelRatio * 0.5 ?
+        (
+            <div id={elementId} className={styles.task} style={{ height: height, backgroundColor: getTask(defaultTask.taskId, user).color }}>
+                <div id={elementId + "_time"} className={styles.taskTime}>{defaultTask.time}h</div>
+                <div className={styles.taskName}>{getTask(defaultTask.taskId, user).name}</div>
+                <div draggable={false} onMouseDown={clickHandler} className={styles.taskBottom}></div>
+            </div>
+        ) : (
+            <div id={elementId} className={styles.taskSmall} style={{ height: height, backgroundColor: getTask(defaultTask.taskId, user).color }}>
+                <div id={elementId + "_time"} className={styles.taskTime}>{defaultTask.time}h</div>
+                <div className={styles.taskName}>{getTask(defaultTask.taskId, user).name}</div>
+                <div draggable={false} onMouseDown={clickHandler} className={styles.taskBottom}></div>
+            </div>
+        )
     )
 }
 

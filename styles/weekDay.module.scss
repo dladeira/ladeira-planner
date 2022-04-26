@@ -64,14 +64,26 @@
     justify-content: center;
     align-items: center;
 
-    margin-bottom: 12.5px;
-    padding-top: 18px;
-    padding-bottom: 32px;
+    margin-bottom: 25px;
 
-    border-radius: 5px;
+    border-radius: 3px;
 
     color: white;
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.256);
+    box-sizing: content-box;
+
+    &Small {
+        @extend .task;
+
+        flex-direction: row;
+        justify-content: flex-start;
+
+        padding-left: 10px;
+
+        .taskName {
+            margin-left: 5px;
+        }
+    }
 
     &Time {
         font-size: 1rem;
@@ -79,7 +91,7 @@
     }
 
     &Name {
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: bold;
         text-align: center;
 
@@ -88,19 +100,20 @@
 
     &Bottom {
         position: absolute;
-        bottom: 0px;
+        left: 0;
+        bottom: 0;
 
         height: 16px;
         width: 100%;
 
-        border-radius: 0 0 5px 5px;
+        border-radius: 0 0 3px 3px;
 
-        background-color: rgba(128, 128, 128, 0.145);
+        background-color: rgba(128, 128, 128, 0.081);
 
         &:hover {
-            background-color: rgba(92, 92, 92, 0.138);
+            background-color: rgba(92, 92, 92, 0.093);
 
-            cursor: pointer;
+            cursor: grab;
         }
     }
 
@@ -108,8 +121,6 @@
         @extend .taskBottom;
         top: 0px;
     }
-
-    box-sizing: content-box;
 }
 
 .activeDay:hover .addContainer {
@@ -164,7 +175,7 @@
     height: 1px;
     width: 100%;
 
-    margin-bottom: 11.5px;
+    margin-bottom: 24px;
 
     background-color: rgba($font_color_2, 0.2);
 }
