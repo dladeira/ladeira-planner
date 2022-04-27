@@ -2,31 +2,43 @@
 
 .container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
 
-    width: 90%;
-
-    margin: 10px auto;
+    margin: 10px 20px;
 }
 
-.setting {
+.category {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    &Title {
+        margin-bottom: 20px;
+
+        font-size: 2.5rem;
+        font-weight: bolder;
+        color: $font_color_2;
+    }
+}
+
+.list {
     min-width: 200px;
     flex-grow: 1;
 }
 
-.settingHeader {
-    margin-bottom: 20px;
+.listHeader {
+    margin-left: 10px;
 
-    border-bottom: 2px solid $font_color_2;
-
-    font-size: 2rem;
-    text-align: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: left;
 }
 
-.settingContainer {
+.listContainer {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -43,140 +55,77 @@
 
     height: 35px;
 
-    margin-bottom: 15px;
-    padding-bottom: 5px;
+    margin-bottom: 2px;
 
-    &Normal {
-        @extend .task;
+    &Delete {
+        margin-right: 10px;
 
-        padding-top: 9px;
+        font-size: 2rem;
+        color: $font_color_2;
 
-        &Category {
-            display: block;
-            
-            height: 30px;
+        transform: rotate(45deg);
+        user-select: none;
 
-            width: 150px;
-
-            padding-left: 4px;
-
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: $font_color_1;
-        }
-
-        &Name {
-            display: block;
-
-            height: 25px;
-            width: 250px;
-
-            font-size: 1rem;
-            color: $font_color_1;
-        }
-
-        &Edit {
-            margin-left: 5px;
-            margin-bottom: 10px;
-            padding: 3px 10px;
-
-            border-radius: 5px;
-
-            background-color: $green_1;
-            color: white;
-
-            &:hover {
-                background-color: darken($green_1, 5);
-
-                cursor: pointer;
-            }
+        &:hover {
+            cursor: pointer;
         }
     }
 
-    &Edit {
-        @extend .task;
+    &Category {
+        margin-right: 10px;
 
-        &Category {
-            @extend .taskNormalCategory;
+        border: none;
+        border-bottom: 2px solid $font_color_2;
 
-            height: 35px;
+        font-size: 1rem;
+        background-color: transparent;
+    }
 
-            padding-left: 0;
+    &Name {
+        margin-right: 10px;
 
-            border: 2px solid $font_color_2;
-            border-radius: 5px;
+        border: none;
+        border-bottom: 2px solid $font_color_2;
 
-            background-color: transparent;
+        font-size: 1rem;
+        background-color: transparent;
+
+        &:focus {
+            outline: none;
         }
+    }
 
-        &Name {
-            @extend .taskNormalName;
+    &ColorContainer {
+        position: relative;
 
-            height: 35px;
-            width: 150px;
+        height: 20px;
+        width: 20px;
 
-            margin-left: 5px;
+        border: 2px solid $font_color_1;
+        border-radius: 100%;
 
-            border: 2px solid $font_color_2;
-            border-radius: 5px;
+        overflow: hidden;
+    }
 
-            background-color: transparent;
-        }
+    &Color {
+        position: absolute;
 
-        &Color {
-            height: 100%;
+        top: -5px;
+        left: -5px;
 
-            margin-left: 5px;
-            padding: 0;
+        height: 200%;
+        width: 200%;
 
-            border: 2px solid $font_color_2;
-            border-radius: 5px;
+        margin: 0;
+        padding: 0;
 
-            background-color: transparent;
+        border: none;
+        outline: none;
 
-            &:hover {
-                cursor: pointer;
-            }
-        }
+        background-color: transparent;
 
-        &Save {
-            height: 100%;
-
-            margin-left: 5px;
-            padding: 5px 10px;
-
-            border: none;
-            border-radius: 5px;
-
-            font-size: 1rem;
-            background-color: $brand_color;
-            color: white;
-
-            &:hover {
-                background-color: darken($brand_color, 5);
-
-                cursor: pointer;
-            }
-        }
-
-        &Delete {
-            height: 100%;
-
-            margin-left: 5px;
-            padding: 5px 10px;
-
-            border: none;
-            border-radius: 5px;
-
-            font-size: 1rem;
-            background-color: $red_1;
-            color: white;
-
-            &:hover {
-                background-color: darken($red_1, 5);
-
-                cursor: pointer;
-            }
+        &:hover {
+            cursor: pointer;
         }
     }
 }
@@ -189,13 +138,13 @@
     &Submit {
         width: 100%;
 
-        padding: 5px 20px;
+        padding: 3px 40px;
 
         border: none;
-        border-radius: 5px;
-        
-        font-size: 1.5rem;
-        background-color: $green_1;
+
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: $font_color_2;
         color: white;
 
         &:hover {
