@@ -1,15 +1,19 @@
-import dbConnect from '../../lib/dbConnect'
-import User from '../../models/User'
+import { getUser } from './user'
 
 async function Route(req, res) {
-    req.body = JSON.parse(req.body)
-    await dbConnect()
+    await getUser(req, {
+        onFound: async user => {
+            req.body = JSON.parse(req.body)
 
-    var user = await User.findOne({ email: req.body.email })
-    user.tasks = req.body.tasks
+            user.tasks = req.body.tasks
 
-    await user.save()
-    res.status(200).send()
+            await user.save()
+            res.status(200).send()
+        },
+        onNotFound: () => {
+            res.status(500).end('Authentication token is invalid, please log in')
+        }
+    })
 }
 
 export default Route
