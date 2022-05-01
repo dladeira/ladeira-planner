@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 $height: 250px;
 $width: 300px;
 
@@ -9,6 +11,23 @@ $width: 300px;
 
     height: 100%;
     width: 100%;
+}
+
+.itemContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 0 auto;
+}
+
+.title {
+    margin-bottom: 50px;
+
+    font-size: 4rem;
+    font-weight: bold;
+    color: $font_color_2;
 }
 
 .canvasContainer {
@@ -82,4 +101,45 @@ $width: 300px;
 
 .green {
     color: #8ac52a;
+}
+
+// -----
+
+.inputContainer {
+    @extend .red;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-end;
+
+    width: fit-content;
+
+    margin-bottom: 60px;
+
+    font-size: 5rem;
+    font-weight: bold;
+}
+
+.input {
+    @extend .red;
+
+    width: 6rem;
+
+    margin: 0 10px;
+    margin-bottom: 5px;
+    padding: 0;
+
+    border: none;
+    border-bottom: 1px solid $font_color_2;
+
+    font-size: 4.5rem;
+    font-weight: 700;
+    text-align: right;
+    letter-spacing: 0.4rem;
+    background: none;
+
+    &:focus {
+        outline: none;
+    }
 }

@@ -5,20 +5,33 @@ import { useState, useEffect } from 'react'
 import styles from '../../styles/timer.module.scss'
 
 function Page() {
-    useUser({ redirectTo: '/api/login' })
+    var user = useUser({ redirectTo: '/api/login' })
+    const [days, setDays] = useState()
 
-    return (
+    useEffect(() => {
+        if (user) {
+            setDays(user.days)
+        }
+    }, [user])
+
+    return (days ? (
         <div className={styles.container}>
-            <Stopwatch />
+            <div className={styles.itemContainer}>
+                <div className={styles.title}>Stopwatch</div>
+                <Stopwatch days={days} setDays={setDays} />
+            </div>
 
-            <Timer />
-        </div>
+            <div className={styles.itemContainer}>
+                <div className={styles.title}>Timer</div>
+                <Timer days={days} setDays={setDays} />
+            </div>
+        </div>) : (<div />)
     )
 
 
 }
 
-function Stopwatch() {
+function Stopwatch({ days, setDays }) {
     const user = useUser({ redirectTo: '/api/login' })
     const [context, setContext] = useAppContext()
     const [time, setTime] = useState(0)
@@ -89,38 +102,41 @@ function Stopwatch() {
 
     function saveActivity(e) {
         if (e.target.value != "") {
+            if (roundToQuarter(time) / 60) {
+                var dayIndex
+                for (var i in days) {
+                    if (days[i].week == context.week && days[i].currentYear == context.year && getWeekDay(new Date()) == days[i].day) {
+                        dayIndex = i
+                    }
+                }
+
+                var taskIndex
+                for (var i in days[dayIndex].tasks) {
+                    if (days[dayIndex].tasks[i].taskId == e.target.value) {
+                        taskIndex = i
+                    }
+                }
+
+                var newDays = [...days]
+                if (taskIndex) {
+                    newDays[dayIndex].tasks[taskIndex].time += roundToQuarter(time) / 60
+                } else {
+                    newDays[dayIndex].tasks.push({ taskId: e.target.value, time: roundToQuarter(time) / 60 })
+                }
+
+                fetch(window.origin + "/api/days", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        days: newDays
+                    })
+                })
+
+                setDays([...newDays])
+            }
+
             setTime(0);
             setInitial(true)
 
-            var dayIndex
-            for (var i in user.days) {
-                if (user.days[i].week == context.week && user.days[i].currentYear == context.year && getWeekDay(new Date()) == user.days[i].day) {
-                    dayIndex = i
-                }
-            }
-
-            var taskIndex
-            for (var i in user.days[dayIndex].tasks) {
-                if (user.days[dayIndex].tasks[i].taskId == e.target.value) {
-                    taskIndex = i
-                }
-            }
-
-            var newDays = [...user.days]
-            if (taskIndex) {
-                newDays[dayIndex].tasks[taskIndex].time += roundToQuarter(time) / 60
-            } else {
-                newDays[dayIndex].tasks.push({ taskId: e.target.value, time: roundToQuarter(time) / 60 })
-            }
-
-            console.log(newDays[dayIndex].tasks)
-
-            fetch(window.origin + "/api/days", {
-                method: "POST",
-                body: JSON.stringify({
-                    days: newDays
-                })
-            })
         }
     }
 
@@ -136,12 +152,12 @@ function Stopwatch() {
                 ) : (
                     <div className={styles.control}>
                         <div className={styles.resumeButton} onClick={e => setRunning(true)}>{initial ? "Start" : "Resume"}</div>
-                        {!initial ? (<div className={styles.resetButton} onSelect={e => { }}>Reset</div>) : <div />}
+                        {!initial ? (<div className={styles.resetButton} onClick={e => { setTime(0); setInitial(true) }}>Reset</div>) : <div />}
                         {!initial ? (
                             <select className={styles.saveButton} onClick={saveActivity}>
                                 <option value="">Save Activity ({roundToQuarter(time)}m)</option>
                                 {user.tasks.map(task =>
-                                    <option value={task.id}>{task.name}</option>
+                                    <option key={task.id} value={task.id}>{task.name}</option>
                                 )}
                             </select>
                         ) : <div />}
@@ -152,10 +168,18 @@ function Stopwatch() {
     )
 }
 
-function Timer() {
+function Timer({ days, setDays }) {
+    const user = useUser({ redirectTo: "/api/login" })
+    const [context, setContext] = useAppContext()
+
+    const [seconds, setSeconds] = useState(0)
+    const [minutes, setMinutes] = useState(30)
+    const [hours, setHours] = useState(1)
     const [time, setTime] = useState(0)
     const [running, setRunning] = useState(false)
     const [initial, setInitial] = useState(true)
+    const [finished, setFinished] = useState(false)
+    const [startTime, setStartTime] = useState(0)
 
     useEffect(() => {
         drawRadius("timerCanvas", 250, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
@@ -164,7 +188,12 @@ function Timer() {
     useEffect(() => {
         const id = setInterval(() => {
             if (running) {
-                setTime(time + 1)
+                setTime(time - 1)
+
+                if (time < 0 && !finished) {
+                    setFinished(true)
+                    resetTimer()
+                }
             }
         }, 1)
         return () => clearInterval(id)
@@ -208,11 +237,106 @@ function Timer() {
         return hours > 0 ? zeroPad(hours, 2) + ":" + zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2) : zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2)
     }
 
+    function setValue(value, index) {
+        switch (index) {
+            case 0:
+                if (!isNaN(value) && value.length <= 2) setHours(value)
+                break;
+            case 1:
+                if (!isNaN(value) && value.length <= 2) setMinutes(value)
+                break;
+            case 2:
+                if (!isNaN(value) && value.length <= 2) setSeconds(value)
+                break;
+        }
+    }
+
+    function startTimer() {
+        var calcHours = hours <= 0 ? 0 : parseInt(hours) * 3600
+        var calcMinutes = minutes <= 0 ? 0 : parseInt(minutes) * 60
+        var calcSeconds = seconds <= 0 ? 0 : parseInt(seconds)
+
+        setTime(calcHours + calcMinutes + calcSeconds)
+        setStartTime(calcHours + calcMinutes + calcSeconds)
+        setRunning(true)
+        setInitial(false)
+        setFinished(false)
+    }
+
+    function resetTimer() {
+        setTime(0)
+        setSeconds(0)
+        setMinutes(30)
+        setHours(1)
+        setRunning(false)
+        setInitial(true)
+    }
+
+    function roundToQuarter(seconds) {
+        var minutes = Math.floor(seconds / 60)
+
+        return Math.round((minutes / 60) * 4) / 4 * 60
+    }
+
+    function getWeekDay(date) {
+        var dayNumber = date.getDay() - 1
+        return dayNumber < 0 ? 6 : dayNumber
+    }
+
+    function saveActivity(e) {
+        if (e.target.value != "") {
+            if (startTime > 0) {
+                var dayIndex
+                for (var i in days) {
+                    if (days[i].week == context.week && days[i].currentYear == context.year && getWeekDay(new Date()) == days[i].day) {
+                        dayIndex = i
+                    }
+                }
+
+                var taskIndex
+                for (var i in days[dayIndex].tasks) {
+                    if (days[dayIndex].tasks[i].taskId == e.target.value) {
+                        taskIndex = i
+                    }
+                }
+
+                var newDays = [...days]
+                if (taskIndex) {
+                    newDays[dayIndex].tasks[taskIndex].time += roundToQuarter(startTime) / 60
+                } else {
+                    newDays[dayIndex].tasks.push({ taskId: e.target.value, time: roundToQuarter(startTime) / 60 })
+                }
+
+                fetch(window.origin + "/api/days", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        days: newDays
+                    })
+                })
+
+                setDays([...newDays])
+            }
+
+            setTime(0);
+            setInitial(true)
+            setFinished(false)
+        }
+    }
+
     return (
         <div className={styles.canvasContainer}>
             <canvas height="600" width="600" className={styles.canvas} id="timerCanvas"></canvas>
             <div className={styles.innerContainer}>
-                <div className={styles.formattedTime + " " + (running ? styles.green : styles.red)}>{formatTime(time)}</div>
+                {initial ? (
+                    <div className={styles.inputContainer}>
+                        <input className={styles.input} type="text" value={hours} onChange={e => setValue(e.target.value, 0)} />:
+                        <input className={styles.input} type="text" value={minutes} onChange={e => setValue(e.target.value, 1)} />:
+                        <input className={styles.input} type="text" value={seconds} onChange={e => setValue(e.target.value, 2)} />
+                    </div>
+                ) : (
+                    <div className={styles.formattedTime + " " + (running ? styles.green : styles.red)}>{formatTime(time)}</div>
+                )}
+
                 {running ? (
                     <div className={styles.control}>
 
@@ -220,8 +344,16 @@ function Timer() {
                     </div>
                 ) : (
                     <div className={styles.control}>
-                        <div className={styles.resumeButton} onClick={e => setRunning(true)}>{initial ? "Start" : "Resume"}</div>
+                        <div className={styles.resumeButton} onClick={initial ? startTimer : e => setRunning(true)}>{initial ? finished ? "Restart" : "Start" : "Resume"}</div>
                         {!initial ? (<div className={styles.resetButton} onClick={e => { setTime(0); setInitial(true) }}>Reset</div>) : <div />}
+                        {finished ? (
+                            <select className={styles.saveButton} onClick={saveActivity}>
+                                <option value="">Record Activity ({roundToQuarter(startTime)}m)</option>
+                                {user.tasks.map(task =>
+                                    <option key={task.id} value={task.id}>{task.name}</option>
+                                )}
+                            </select>
+                        ) : <div />}
                     </div>
                 )}
             </div>
