@@ -47,7 +47,7 @@ function Stopwatch({ days, setDays }) {
             if (running) {
                 setTime(time + 1)
             }
-        }, 1)
+        }, 1000)
         return () => clearInterval(id)
     })
 
@@ -195,7 +195,7 @@ function Timer({ days, setDays }) {
                     resetTimer()
                 }
             }
-        }, 1)
+        }, 1000)
         return () => clearInterval(id)
     })
 
@@ -285,7 +285,7 @@ function Timer({ days, setDays }) {
 
     function saveActivity(e) {
         if (e.target.value != "") {
-            if (startTime > 0) {
+            if (roundToQuarter(startTime) / 60) {
                 var dayIndex
                 for (var i in days) {
                     if (days[i].week == context.week && days[i].currentYear == context.year && getWeekDay(new Date()) == days[i].day) {
