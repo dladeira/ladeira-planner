@@ -19,6 +19,7 @@ function Component() {
             <div className={styles.linkContainer}>
                 <BarLink text="Overview" location="/user/overview" />
                 <BarLink text="Schedule" location="/user/schedule" />
+                <BarLink text="Timer" location="/user/timer" />
                 <BarLink text="Settings" location="/user/settings" />
                 {/* <BarLink text="Documentation" location="/user/overview" />
                 <BarLink text="API" location="/user/overview" /> */}

@@ -34,6 +34,7 @@ function Page() {
         </div>
     ) : <div />)
 }
+
 function getWeekDay(date) {
     var dayNumber = date.getDay() - 1
     return dayNumber < 0 ? 6 : dayNumber

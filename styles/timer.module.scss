@@ -1,0 +1,85 @@
+$height: 250px;
+$width: 300px;
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
+.canvasContainer {
+    position: relative;
+}
+
+.innerContainer {
+    position: absolute;
+    top: calc(50% - ($height / 2));
+    left: calc(50% - ($width / 2));
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: $height;
+    width: $width;
+}
+
+.formattedTime {
+    margin-bottom: 60px;
+
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: 0.4rem;
+}
+
+.btn {
+    height: 2rem;
+
+    margin: 20px 0;
+    padding: 0;
+
+    font-size: 1.7rem;
+    font-weight: 600;
+    text-align: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.pauseButton {
+    @extend .btn, .red;
+}
+
+.resumeButton {
+    @extend .btn, .green;
+}
+
+.resetButton {
+    @extend .btn, .red;
+}
+
+.saveButton {
+    @extend .btn, .red;
+
+    margin-top: 0;
+
+    border: none;
+
+    font-size: 1rem;
+    background: none;
+    outline: none;
+}
+
+.red {
+    color: #e15554;
+}
+
+.green {
+    color: #8ac52a;
+}
