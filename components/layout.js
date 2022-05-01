@@ -21,6 +21,8 @@ function Component({ children }) {
                 {/* Icons */}
                 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet" />
                 <script src="https://kit.fontawesome.com/fc8fb46941.js" async={true} crossOrigin="anonymous" />
+
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             {router.pathname.startsWith("/user") ? (
                 <div className="userBody">

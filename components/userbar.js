@@ -1,12 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useUser } from '../lib/hooks'
 
 import styles from '../styles/userbar.module.scss'
 
 function Component() {
-    const user = useUser()
-
     return (
         <div className={styles.container} >
             <div className={styles.brandContainer}>
@@ -21,8 +18,6 @@ function Component() {
                 <BarLink text="Schedule" location="/user/schedule" />
                 <BarLink text="Timer" location="/user/timer" />
                 <BarLink text="Settings" location="/user/settings" />
-                {/* <BarLink text="Documentation" location="/user/overview" />
-                <BarLink text="API" location="/user/overview" /> */}
             </div>
             <Link href={"/api/logout"}>
                 <a className={styles.authLogout} draggable="false">

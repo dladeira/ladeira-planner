@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
     height: 100%;
@@ -16,8 +16,6 @@
 }
 
 .title {
-    width: 1000px;
-
     font-size: 6.5rem;
     font-weight: bold;
     text-align: center;
@@ -25,8 +23,9 @@
 }
 
 .subtitle {
-    width: 800px;
+    max-width: 800px;
 
+    margin: 0 50px;
     margin-top: 20px;
 
     font-size: 2.6rem;
@@ -40,12 +39,13 @@
 }
 
 .enter {
-    margin: 40px 0 30px 0;
+    margin: 40px 0;
     padding: 20px 40px;
 
     border-radius: 20px;
 
     font-size: 3.5rem;
+    text-align: center;
     background-color: $login_color;
     color: white;
 
@@ -56,13 +56,45 @@
     }
 }
 
+.image {
+    position: absolute;
+    bottom: 0;
 
-.imageWrapper {
-    height: 500px;
+    height: 300px;
     width: 100%;
 
     filter: blur(3px);
     background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.8)), url("/landing-preview-original.png");
     background-position: center 0;
     background-size: cover;
+
+    z-index: -1;
+}
+
+@media (max-width: $phone_bp) {
+    .title {
+        font-size: 4rem;
+    }
+
+    .subtitle {
+        font-size: 1.3rem;
+        letter-spacing: -0.02rem;
+    }
+
+    .enter {
+        padding: 20px 20px;
+
+        font-size: 2.4rem;
+
+        margin-top: auto;
+        margin-bottom: 50px;
+
+        width: 80%;
+    }
+
+    .image {
+        height: 400px;
+
+        background-size: 2000px;
+    }
 }
