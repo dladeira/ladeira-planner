@@ -22,11 +22,11 @@ function Page() {
                     <Doughnut data={getChartData(user)} width={10} height={10} options={chartOptions} />
                 </div>
 
-                <div className={styles.thisWeekContainer}>
-                    <div className={styles.thisWeekHours}>
+                <div className={styles.hoursContainer}>
+                    <div className={styles.hours}>
                         {Math.round(getHoursInWeek(user, context.week, date.getFullYear()))}
                     </div>
-                    <div className={styles.thisWeekSubtitle}>
+                    <div className={styles.hoursText}>
                         Hours this week
                     </div>
                 </div>

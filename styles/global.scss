@@ -42,3 +42,9 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+@media (max-width: $phone_bp) {
+    .userBody {
+        padding-left: 0;
+    }
+}
