@@ -7,7 +7,7 @@
     align-items: center;
 
     height: 100%;
-    width: 100%;
+    width: 83%;
 
     margin: 0 auto;
     padding: 10px 10px;
@@ -114,6 +114,10 @@
 }
 
 @media (max-width: $phone_bp) {
+    .container {
+        width: 100%;
+    }
+
     .chart {
         display: none;
     }
