@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useUser } from '../lib/hooks'
+import Button from './reusable/button.js'
 
 import styles from '../styles/navbar.module.scss'
 
@@ -32,11 +33,11 @@ function Component() {
                     </a>
                 </Link>
             </div> */}
-            <Link href={user ? "/api/logout" : "/api/login"}>
-                <a className={user ? styles.authLogout : styles.authLogin} draggable="false">
-                    {user ? "Logout" : "Login"}
-                </a>
-            </Link>
+            {user ? (
+                <Button color="red" size="sm" href="api/logout">Logout</Button>
+            ) : (
+                <Button color="blue" size="sm" href="api/login">Login</Button>
+            )}
         </div >
     )
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Button from './reusable/button.js'
 
 import styles from '../styles/userbar.module.scss'
 
@@ -19,11 +20,9 @@ function Component() {
                 <BarLink text="Timer" location="/user/timer" />
                 <BarLink text="Settings" location="/user/settings" />
             </div>
-            <Link href={"/api/logout"}>
-                <a className={styles.authLogout} draggable="false">
-                    Logout
-                </a>
-            </Link>
+            <div className={styles.buttonWrapper}>
+                <Button color="red" size="sm" href="/api/logout">Logout</Button>
+            </div>
         </div >
     )
 }

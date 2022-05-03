@@ -1,0 +1,61 @@
+$default: black;
+$blue: #44A9FD;
+$red: #E15554;
+
+.button {
+    border: 2px solid $default;
+    border-radius: 20px;
+    font-weight: normal;
+    color: $default;
+
+    transition: cubic-bezier(.22, .61, .36, 1) 300ms all;
+
+    &:hover {
+        background-color: $default;
+        color: white;
+    }
+}
+
+// ----- Sizes
+
+.size-sm {
+    padding: 5px 15px;
+
+    font-size: 1.5rem;
+}
+
+.size-md {
+    padding: 5px 15px;
+    
+    font-size: 2rem;
+}
+
+.size-lg {
+    padding: 10px 30px;
+    
+    font-size: 4rem;
+}
+
+// ----- Colors
+
+.color-blue {
+    color: $blue;
+
+    border-color: $blue;
+
+    &:hover {
+        background-color: $blue;
+        color: white;
+    }
+}
+
+.color-red {
+    color: $red;
+
+    border-color: $red;
+
+    &:hover {
+        background-color: $red;
+        color: white;
+    }
+}

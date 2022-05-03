@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react'
 
 import { useAppContext } from '../lib/context'
+import { useMediaQuery } from 'react-responsive'
 
 import styles from '../styles/weekDay.module.scss'
 
-function WeekDay({ weekDay, weekDayIndex, user, today, disabled }) {
+var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+function WeekDay({ weekDay, user, today, disabled }) {
     const [dayIndex, setDayIndex] = useState()
     const [tasks, setTasks] = useState([])
     const [context, setContext] = useAppContext()
+
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
     if (disabled) {
         return (
             <div className={styles.container}>
                 <div className={styles.title}>
-                    <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDay}</div>
+                    <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDays[weekDay]}</div>
+                    <div className={styles.titleDate}></div>
                 </div>
-                <div className={styles.weekDayTasksDisabled}>
+
+                <div className={styles.tasks}>
+
+                    <Lines count={100} thickOffset={4} />
                 </div>
             </div>
         )
@@ -25,7 +34,7 @@ function WeekDay({ weekDay, weekDayIndex, user, today, disabled }) {
         for (var i = 0; i < user.days.length; i++) {
             var day = user.days[i]
             if (day) {
-                if (day.week == context.week && day.day == weekDayIndex && day.currentYear == context.year) {
+                if (day.week == context.week && day.day == weekDay && day.currentYear == context.year) {
                     setDayIndex(i)
                     setTasks(user.days[i].tasks)
                     return
@@ -47,8 +56,8 @@ function WeekDay({ weekDay, weekDayIndex, user, today, disabled }) {
     return (
         <div className={styles.container + " " + styles.activeDay}>
             <div className={styles.title}>
-                <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDay}</div>
-                <div className={styles.titleDate}>{getDateText(weekDayIndex, context.week, context.year)}</div>
+                <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDays[weekDay]}</div>
+                <div className={styles.titleDate}>{getDateText(weekDay, context.week, context.year)}</div>
             </div>
 
             <div className={styles.tasks}>
@@ -57,15 +66,15 @@ function WeekDay({ weekDay, weekDayIndex, user, today, disabled }) {
 
                 {getSortedRecordedTasks().map(task => {
                     if (task) {
-                        return <Task key={task.taskId + "-" + weekDayIndex + "-" + context.week} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
+                        return <Task key={task.taskId + "-" + weekDay + "-" + context.week} defaultTask={task} dayIndexInUser={dayIndex} user={user} setTasks={setTasks} tasks={tasks} />
                     }
                 })}
 
-                <AddNew user={user} setDayIndex={setDayIndex} setTasks={setTasks} dayIndex={dayIndex} weekDayIndex={weekDayIndex} />
+                <AddNew user={user} setDayIndex={setDayIndex} setTasks={setTasks} dayIndex={dayIndex} weekDay={weekDay} />
             </div>
 
-            {weekDayIndex == 0 ? <RatingHeader user={user} weekDay={weekDayIndex} /> : <div />}
-            <Ratings user={user} weekDay={weekDayIndex} />
+            {isMobile || weekDay == 0 ? <RatingHeader user={user} weekDay={weekDay} /> : <div />}
+            <Ratings user={user} weekDay={weekDay} />
         </div>
     )
 }
@@ -160,7 +169,7 @@ function Rating({ rating, user, day, selectedData }) {
     )
 }
 
-function AddNew({ user, setDayIndex, setTasks, dayIndex, weekDayIndex }) {
+function AddNew({ user, setDayIndex, setTasks, dayIndex, weekDay }) {
     const [context, setContext] = useAppContext()
     const [addTask] = useState("default")
 
@@ -176,7 +185,7 @@ function AddNew({ user, setDayIndex, setTasks, dayIndex, weekDayIndex }) {
         } else {
             newDays.push({
                 week: context.week,
-                day: weekDayIndex,
+                day: weekDay,
                 tasks: [{
                     taskId: task,
                     time: 1

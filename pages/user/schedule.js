@@ -1,5 +1,6 @@
 import { useUser } from '../../lib/hooks'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 import WeekDay from '../../components/weekDay'
 import { useAppContext } from '../../lib/context'
@@ -11,29 +12,71 @@ var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturda
 function Page() {
     var user = useUser({ redirectTo: '/api/login' })
     var date = new Date()
-    const [tasks, setTasks] = useState()
     const [context, setContext] = useAppContext()
+    const [weekDay, setWeekDay] = useState(getWeekDay(date))
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
-    useEffect(() => {
-        if (user) {
-            setTasks(user.tasks)
+    function toggleDay(positive) {
+        if (positive) {
+            if (weekDay >= 6) {
+                setWeekDay(0)
+                toggleWeek(true)
+            } else {
+                if (!isInYear(context.year, context.week, weekDay + 1)) {
+                    toggleWeek(true)
+                }
+                setWeekDay(++weekDay)
+            }
+        } else {
+            if (weekDay <= 0) {
+                setWeekDay(6)
+                toggleWeek(false)
+            } else {
+                if (!isInYear(context.year, context.week, weekDay - 1)) {
+                    toggleWeek(false)
+                }
+                setWeekDay(--weekDay)
+            }
         }
-    }, [user])
+    }
 
-    return (user && tasks ? (
+    function toggleWeek(increment) {
+        if (increment) {
+            if (context.week + 1 >= getWeeksInYear(context.year)) {
+                setContext({ week: 1, year: context.year + 1 })
+            } else {
+                setContext({ week: context.week + 1, year: context.year })
+            }
+        } else {
+            if (context.week - 1 <= 0) {
+                setContext({ week: getWeeksInYear(context.year - 1), year: context.year - 1 })
+            } else {
+                setContext({ week: context.week - 1, year: context.year })
+            }
+        }
+    }
+
+    return (user ? (
         <div className={styles.container}>
             <div className={styles.weekDays}>
-                {weekDays.map(weekDay => {
+                {isMobile ? (
+                    <div className={styles.wrapper}>
+                        <div className={styles.titleContainer}><div className={styles.arrow} onClick={e => toggleDay(false)}>{"<"}</div><div className={styles.arrow} onClick={e => toggleDay(true)}>{">"}</div></div>
+                        {isInYear(context.year, context.week, weekDay) ? <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDay} weekDay={weekDay} user={user} today={date.getCurrentWeek() == context.week && weekDay == weekDay && context.year == date.getFullYear()} /> : <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />}
+                    </div>
+                ) : weekDays.map(weekDay => {
                     if (isInYear(context.year, context.week, weekDays.indexOf(weekDay)))
-                        return <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDays.indexOf(weekDay)} weekDay={weekDay} weekDayIndex={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(date) && context.year == date.getFullYear()} />
+                        return <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDays.indexOf(weekDay)} weekDay={weekDays.indexOf(weekDay)} user={user} today={date.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(date) && context.year == date.getFullYear()} />
                     else
-                        return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />
+                        return <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDays.indexOf(weekDay)} disabled={true} />
                 }
                 )}
             </div>
         </div>
     ) : <div />)
 }
+
+
 
 function getWeekDay(date) {
     var dayNumber = date.getDay() - 1

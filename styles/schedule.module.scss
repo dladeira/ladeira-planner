@@ -8,7 +8,7 @@
     width: 97%;
 
     margin: 0 auto;
-    padding-top: 40px;
+    padding: 20px 0;
 }
 
 .weekDays {
@@ -23,4 +23,32 @@
     margin: 0 auto;
     
     overflow-y: hidden;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
+.titleContainer {
+    position: absolute;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 90%;
+
+    margin: 0 auto;
+}
+
+.arrow {
+    font-size: 2rem;
+    font-weight: 700;
 }

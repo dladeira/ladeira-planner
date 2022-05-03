@@ -143,3 +143,53 @@ $width: 300px;
         outline: none;
     }
 }
+
+@media (max-width: $phone_bp) {
+    .container {
+        flex-direction: column;
+
+        margin-top: 60px;
+    }
+
+    .title {
+        margin-bottom: 0;
+
+        font-size: 3rem;
+    }
+
+    .btn {
+        height: 1.6rem;
+
+        margin: 5px 0;
+
+        font-size: 1.2rem;
+    }
+
+    .formattedTime {
+        margin-bottom: 0;
+
+        font-size: 3rem;
+    }
+
+    .innerContainer {
+        top: calc(50% - ($height / 3));
+        left: calc(50% - ($width / 3));
+
+        height: calc($height / 1.5);
+        width: calc($width / 1.5);
+    }
+
+    .inputContainer {
+        font-size: 3rem;
+
+        margin-bottom: 0;
+    }
+
+    .input {
+        margin: 0;
+
+        width: 4rem;
+
+        font-size: 3rem;
+    }
+}

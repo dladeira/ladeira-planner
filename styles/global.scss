@@ -46,5 +46,7 @@ a {
 @media (max-width: $phone_bp) {
     .userBody {
         padding-left: 0;
+
+        padding-top: calc($weekHeader_height + 58.6px);
     }
 }

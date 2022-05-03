@@ -1,6 +1,7 @@
 import { useUser } from '../../lib/hooks'
 import { useAppContext } from '../../lib/context'
 import { useState, useEffect } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 import styles from '../../styles/timer.module.scss'
 
@@ -37,9 +38,14 @@ function Stopwatch({ days, setDays }) {
     const [time, setTime] = useState(0)
     const [running, setRunning] = useState(false)
     const [initial, setInitial] = useState(true)
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
     useEffect(() => {
-        drawRadius("stopwatchCanvas", 250, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        if (isMobile) {
+            drawRadius("stopwatchCanvas", 150, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        } else {
+            drawRadius("stopwatchCanvas", 250, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        }
     })
 
     useEffect(() => {
@@ -59,7 +65,7 @@ function Stopwatch({ days, setDays }) {
 
         function drawWedge(ctx, x, y, radius, percent, color) {
             ctx.strokeStyle = color;
-            ctx.lineWidth = 50;
+            ctx.lineWidth = isMobile ? 30 : 50;
 
             ctx.translate(x, y);        // translate to rotating pivot
             ctx.rotate(Math.PI * 0.5);  // rotate, here 90° deg
@@ -142,7 +148,7 @@ function Stopwatch({ days, setDays }) {
 
     return (
         <div className={styles.canvasContainer}>
-            <canvas height="600" width="600" className={styles.canvas} id="stopwatchCanvas"></canvas>
+            <canvas height={isMobile ? 350 : 600} width={isMobile ? 350 : 600} className={styles.canvas} id="stopwatchCanvas"></canvas>
             <div className={styles.innerContainer}>
                 <div className={styles.formattedTime + " " + (running ? styles.green : styles.red)}>{formatTime(time)}</div>
                 {running ? (
@@ -171,6 +177,7 @@ function Stopwatch({ days, setDays }) {
 function Timer({ days, setDays }) {
     const user = useUser({ redirectTo: "/api/login" })
     const [context, setContext] = useAppContext()
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
     const [seconds, setSeconds] = useState(0)
     const [minutes, setMinutes] = useState(30)
@@ -182,7 +189,11 @@ function Timer({ days, setDays }) {
     const [startTime, setStartTime] = useState(0)
 
     useEffect(() => {
-        drawRadius("timerCanvas", 250, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        if (isMobile) {
+            drawRadius("timerCanvas", 150, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        } else {
+            drawRadius("timerCanvas", 250, (time / 60 / 60 - Math.floor(time / 60 / 60)) * 100)
+        }
     })
 
     useEffect(() => {
@@ -190,7 +201,7 @@ function Timer({ days, setDays }) {
             if (running) {
                 setTime(time - 1)
 
-                if (time < 0 && !finished) {
+                if (time <= 0 && !finished) {
                     setFinished(true)
                     resetTimer()
                 }
@@ -207,7 +218,7 @@ function Timer({ days, setDays }) {
 
         function drawWedge(ctx, x, y, radius, percent, color) {
             ctx.strokeStyle = color;
-            ctx.lineWidth = 50;
+            ctx.lineWidth = isMobile ? 30 : 50;
 
             ctx.translate(x, y);        // translate to rotating pivot
             ctx.rotate(Math.PI * 0.5);  // rotate, here 90° deg
@@ -325,7 +336,7 @@ function Timer({ days, setDays }) {
 
     return (
         <div className={styles.canvasContainer}>
-            <canvas height="600" width="600" className={styles.canvas} id="timerCanvas"></canvas>
+            <canvas height={isMobile ? 350 : 600} width={isMobile ? 350 : 600} className={styles.canvas} id="timerCanvas"></canvas>
             <div className={styles.innerContainer}>
                 {initial ? (
                     <div className={styles.inputContainer}>

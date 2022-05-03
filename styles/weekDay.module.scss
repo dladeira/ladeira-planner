@@ -248,3 +248,46 @@
 .star:hover {
     cursor: pointer;
 }
+
+@media (max-width: $phone_bp) {
+    .container {
+        width: 60%;
+
+        margin: 0 auto;
+    }
+
+    .star {
+        height: 44px;
+        width: 36px;
+
+        font-size: 2rem;
+    }
+
+    .headerContainer {
+        left: -30px;
+
+        height: 138px;
+    }
+
+    .header {
+        font-size: 1.4rem
+    }
+
+    .title {
+        &WeekDay {
+            font-size: 1.7rem;
+        }
+
+        &Date {
+            font-size: 1.3rem;
+        }
+    }
+
+    .rating {
+        width: 14rem;
+    }
+
+    .addContainer {
+        opacity: 1;
+    }
+}
