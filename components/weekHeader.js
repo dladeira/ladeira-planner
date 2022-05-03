@@ -1,5 +1,7 @@
 import { useAppContext } from '../lib/context'
 
+import { getWeeksInYear } from '../lib/util'
+
 import styles from '../styles/weekHeader.module.scss'
 
 function Component() {
@@ -8,15 +10,21 @@ function Component() {
     function toggleWeek(increment) {
         if (increment) {
             if (context.week + 1 >= getWeeksInYear(context.year)) {
-                setContext({ week: 1, year: context.year + 1 })
+                context.week = 1
+                context.year = context.year + 1
+                setContext({ ...context })
             } else {
-                setContext({ week: context.week + 1, year: context.year })
+                context.week = context.week + 1
+                setContext({ ...context })
             }
         } else {
             if (context.week - 1 <= 0) {
-                setContext({ week: getWeeksInYear(context.year - 1), year: context.year - 1 })
+                context.week = getWeeksInYear(context.year - 1)
+                context.year = context.year - 1
+                setContext({ ...context })
             } else {
-                setContext({ week: context.week - 1, year: context.year })
+                context.week = context.week - 1
+                setContext({ ...context })
             }
         }
     }
@@ -34,18 +42,6 @@ function Component() {
 
         </div>
     )
-}
-
-function getWeeksInYear(y) {
-    var d,
-        isLeap;
-
-    d = new Date(y, 0, 1);
-    isLeap = new Date(y, 1, 29).getMonth() === 1;
-
-    //check for a Jan 1 that's a Thursday or a leap year that has a 
-    //Wednesday jan 1. Otherwise it's 52
-    return d.getDay() === 4 || isLeap && d.getDay() === 3 ? 53 : 52
 }
 
 export default Component

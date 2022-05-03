@@ -1,0 +1,112 @@
+@import "../../styles/variables.scss";
+
+.container {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    height: 98%;
+    width: 12%;
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    width: 100%;
+
+    margin-bottom: 30px;
+    padding-bottom: 2px;
+
+    border-bottom: 3px solid $weekDay_divider;
+
+    font-weight: bold;
+
+    &WeekDay {
+        font-size: 1.2vw;
+        color: $weekDay_color;
+
+        &Today {
+            @extend .titleWeekDay;
+            color: $brand_color;
+        }
+    }
+
+    &Date {
+        font-size: 1vw;
+        color: $font_color_1;
+    }
+}
+
+.tasks {
+    position: relative;
+
+    height: 100%;
+    width: 100%;
+
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.lines {
+    position: absolute;
+
+    height: calc(100% - 10px);
+    width: 100%;
+
+    overflow-y: hidden;
+}
+
+.line {
+    height: 1px;
+    width: 100%;
+
+    margin-bottom: 24px;
+
+    background-color: rgba($font_color_2, 0.2);
+}
+
+.thickLine {
+    @extend .line;
+
+    background-color: $font_color_2;
+}
+
+.addContainer {
+    opacity: 0;
+}
+
+.activeDay:hover .addContainer {
+    opacity: 1;
+}
+
+@media (max-width: $phone_bp) {
+    .container {
+        width: 60%;
+
+        margin: 0 auto;
+    }
+
+    .title {
+        &WeekDay {
+            font-size: 1.7rem;
+        }
+
+        &Date {
+            font-size: 1.3rem;
+        }
+    }
+
+    .addContainer {
+        opacity: 1;
+    }
+}

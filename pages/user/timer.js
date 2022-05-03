@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 import styles from '../../styles/timer.module.scss'
 
 function Page() {
-    var user = useUser({ redirectTo: '/api/login' })
+    const [user] = useUser({ userOnly: true })
     const [days, setDays] = useState()
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function Page() {
 }
 
 function Stopwatch({ days, setDays }) {
-    const user = useUser({ redirectTo: '/api/login' })
+    const [user] = useUser({ userOnly: true })
     const [context, setContext] = useAppContext()
     const [time, setTime] = useState(0)
     const [running, setRunning] = useState(false)
@@ -175,7 +175,7 @@ function Stopwatch({ days, setDays }) {
 }
 
 function Timer({ days, setDays }) {
-    const user = useUser({ redirectTo: "/api/login" })
+    const [user] = useUser({ userOnly: true })
     const [context, setContext] = useAppContext()
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 

@@ -1,0 +1,87 @@
+@import "../../styles/variables.scss";
+
+.headerWrapper {
+    height: 0px;
+    position: relative;
+}
+
+.headerContainer {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 72px;
+
+    margin-top: 10px;
+}
+
+.header {
+    margin: 1.5px 0;
+
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: $font_color_2;
+
+    user-select: none;
+}
+
+.ratings {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 100%;
+
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    width: 9rem;
+
+    margin: 1px;
+}
+
+.star {
+    height: 22px;
+    width: 18px;
+
+    font-size: 1rem;
+    color: $font_color_1;
+}
+
+.star:hover {
+    cursor: pointer;
+}
+
+@media (max-width: $phone_bp) {
+    .star {
+        height: 44px;
+        width: 36px;
+
+        font-size: 2rem;
+    }
+
+    .headerContainer {
+        left: -30px;
+
+        height: 138px;
+    }
+
+    .header {
+        font-size: 1.4rem
+    }
+
+    .rating {
+        width: 14rem;
+    }
+}

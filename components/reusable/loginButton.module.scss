@@ -3,9 +3,13 @@ $blue: #44A9FD;
 $red: #E15554;
 
 .button {
+    padding: 5px 15px;
+
     border: 2px solid $default;
     border-radius: 20px;
+
     font-weight: normal;
+    font-size: 1.5rem;
     color: $default;
 
     transition: cubic-bezier(.22, .61, .36, 1) 300ms all;
@@ -16,29 +20,7 @@ $red: #E15554;
     }
 }
 
-// ----- Sizes
-
-.size-sm {
-    padding: 5px 15px;
-
-    font-size: 1.5rem;
-}
-
-.size-md {
-    padding: 5px 15px;
-    
-    font-size: 2rem;
-}
-
-.size-lg {
-    padding: 10px 30px;
-    
-    font-size: 4rem;
-}
-
-// ----- Colors
-
-.color-blue {
+.login {
     color: $blue;
 
     border-color: $blue;
@@ -49,7 +31,7 @@ $red: #E15554;
     }
 }
 
-.color-red {
+.logout {
     color: $red;
 
     border-color: $red;
