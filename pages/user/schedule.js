@@ -62,7 +62,7 @@ function Page() {
                 {isMobile ? (
                     <div className={styles.wrapper}>
                         <div className={styles.titleContainer}><div className={styles.arrow} onClick={e => toggleDay(false)}>{"<"}</div><div className={styles.arrow} onClick={e => toggleDay(true)}>{">"}</div></div>
-                        {isInYear(context.year, context.week, weekDay) ? <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDay} weekDay={weekDay} user={user} today={date.getCurrentWeek() == context.week && weekDay == weekDay && context.year == date.getFullYear()} /> : <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />}
+                        {isInYear(context.year, context.week, weekDay) ? <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDay} weekDay={weekDay} user={user} today={date.getCurrentWeek() == context.week && weekDay == getWeekDay(date) && context.year == date.getFullYear()} /> : <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />}
                     </div>
                 ) : weekDays.map(weekDay => {
                     if (isInYear(context.year, context.week, weekDays.indexOf(weekDay)))
