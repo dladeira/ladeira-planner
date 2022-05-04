@@ -1,6 +1,8 @@
 import { useUser } from '../../lib/hooks'
 import { useState, useEffect } from 'react'
 
+import { generateId } from '../../lib/util'
+
 import styles from '../../styles/settings.module.scss'
 
 function Page() {
@@ -41,7 +43,7 @@ function Page() {
         user.tasks.push({
             name: "---",
             color: "#8ac52a",
-            id: generateRandomString(64, user)
+            id: generateId(user)
         })
 
         setUser({ ...user })
@@ -59,7 +61,7 @@ function Page() {
 
         user.categories.push({
             name: "---",
-            id: generateRandomString(64, user)
+            id: generateId(user)
         })
 
         setUser({ ...user })
@@ -77,7 +79,7 @@ function Page() {
 
         user.ratings.push({
             name: "---",
-            id: generateRandomString(64, user)
+            id: generateId(user)
         })
 
         setUser({ ...user })
@@ -362,26 +364,6 @@ function Rating({ rating }) {
             <input className={styles.taskName} type="text" name="title" value={name} onChange={e => { setName(e.target.value) }} />
         </div>
     )
-}
-
-function generateRandomString(length, user) {
-    while (true) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() *
-                characters.length));
-        }
-
-        // Check for duplicates
-        for (var i = 0; i < user.tasks; i++) {
-            if (user.tasks[i].id == result)
-                continue
-        }
-
-        return result;
-    }
 }
 
 function categoryToString(categoryId, user) {
