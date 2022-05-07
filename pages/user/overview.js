@@ -3,10 +3,10 @@ import { Doughnut } from 'react-chartjs-2'
 import { useUser } from '../../lib/hooks'
 import { useAppContext } from '../../lib/context'
 import { getWeeksInYear, getTask, getWeeklyTasks, getWeeklyHours, getPercentDifference } from '../../lib/util'
+import CategoryStats from '../../components/overview/categoryStats'
 
 import styles from '../../styles/overview.module.scss'
 
-const date = new Date()
 const chartOptions = {
     cutout: "65%",
 }
@@ -24,7 +24,7 @@ function Page() {
 
                 <div className={styles.hoursContainer}>
                     <div className={styles.hours}>
-                        {Math.round(getWeeklyHours(user, context.week, date.getFullYear()))}
+                        {Math.round(getWeeklyHours(user, context.week, context.year))}
                     </div>
                     <div className={styles.hoursText}>
                         Hours this week
@@ -32,11 +32,7 @@ function Page() {
                 </div>
             </div>
 
-            <div className={styles.categories}>
-                {user.categories.map(category =>
-                    <CategoryMenu key={category.id} user={user} category={category} />
-                )}
-            </div>
+            <CategoryStats />
         </div>
     ) : <div />)
 
@@ -84,40 +80,6 @@ function Page() {
         }
 
         return data
-    }
-}
-
-function CategoryMenu({ user, category }) {
-    const [context, setContext] = useAppContext()
-
-    return (
-        <div className={styles.category}>
-            <div className={styles.categoryHeader}>{category.name}</div>
-
-            <div className={styles.tasksList}>
-                {user.tasks.filter(task => task.category == category.id).map(task => {
-                    return getCategoryTask(task)
-                })}
-            </div>
-        </div>
-    )
-
-    function getCategoryTask(task) {
-        var thisWeek = getWeeklyHours(user, context.week, date.getFullYear(), task.id)
-        var lastWeek
-        if (context.week - 1 > 0)
-            lastWeek = getWeeklyHours(user, context.week - 1, date.getFullYear(), task.id)
-        else
-            lastWeek = getWeeklyHours(user, getWeeksInYear(date.getFullYear() - 1), date.getFullYear() - 1, task.id)
-
-
-        return (<div key={task.id} className={styles.task}>
-            <div className={styles.taskKey}>{task.name}</div>
-            <div className={styles.taskValue}>
-                <div className={styles.taskHours}>{getWeeklyHours(user, context.week, date.getFullYear(), task.id)}</div>
-                (<span style={{ color: getPercentDifference(lastWeek, thisWeek) > 0 ? "green" : "red" }}>{getPercentDifference(lastWeek, thisWeek)}%</span>)
-            </div>
-        </div>)
     }
 }
 

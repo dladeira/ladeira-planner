@@ -55,64 +55,6 @@
     color: black;
 }
 
-.categories {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: flex-end;
-
-    margin-top: auto;
-
-    width: 100%;
-}
-
-.category {
-    height: 100%;
-    width: 100%;
-
-    &Header {
-        padding-bottom: 5px;
-
-        border-bottom: 2px solid $font_color_1;
-
-        font-size: 1.8rem;
-        font-weight: bold;
-        text-align: center;
-        color: black;
-    }
-}
-
-.tasksList {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.task {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    width: 90%;
-
-    padding: 5px 0;
-
-    font-size: 1.2rem;
-    color: $font_color_1;
-
-    &Value {
-        display: flex;
-        flex-direction: row;
-        width: 130px;
-    }
-
-    &Hours {
-        margin-right: auto;
-    }
-}
-
 @media (max-width: $phone_bp) {
     .container {
         width: 100%;
@@ -146,23 +88,5 @@
         margin: 0 auto;
 
         font-size: 2rem;
-    }
-
-    .categories {
-        flex-direction: column;
-    }
-
-    .categoryHeader {
-        border-bottom: none;
-
-        font-size: 1.2rem;
-    }
-
-    .task {
-        font-size: 0.9rem;
-
-        &Value {
-            width: 80px;
-        }
     }
 }
