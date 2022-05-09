@@ -9,7 +9,8 @@ function Component() {
 
     function toggleWeek(increment) {
         if (increment) {
-            if (context.week + 1 >= getWeeksInYear(context.year)) {
+            console.log(context.year)
+            if (context.week + 1 > getWeeksInYear(context.year)) {
                 context.week = 1
                 context.year = context.year + 1
                 setContext({ ...context })

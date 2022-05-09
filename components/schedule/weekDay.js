@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAppContext } from '../../lib/context'
 import { useUser } from '../../lib/hooks'
 import { useMediaQuery } from 'react-responsive'
-import { getTask, getDay } from '../../lib/util'
+import { getTask, getDay, getDateText } from '../../lib/util'
 
 import Task, { AddTask } from './task'
 import Ratings, { RatingHeader } from './ratings'
@@ -11,7 +11,7 @@ import styles from './weekDay.module.scss'
 
 var weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-function WeekDay({ weekDay, today, disabled }) {
+function WeekDay({ weekDay, today }) {
     const [user, setUser] = useUser()
     const [context] = useAppContext()
     const [dayIndex, setDayIndex] = useState()
@@ -32,22 +32,6 @@ function WeekDay({ weekDay, today, disabled }) {
     }, [user, context])
 
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
-
-    if (disabled) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.title}>
-                    <div className={today ? styles.titleWeekDayToday : styles.titleWeekDay}>{weekDays[weekDay]}</div>
-                    <div className={styles.titleDate}></div>
-                </div>
-
-                <div className={styles.tasks}>
-
-                    <Lines count={100} thickOffset={4} />
-                </div>
-            </div>
-        )
-    }
 
     function getSortedRecordedTasks() {
         if (dayData) {
@@ -95,12 +79,6 @@ function Lines({ count, thickOffset }) {
                 return <div key={counter} className={styles.line} />
         })}</div>
     )
-}
-
-function getDateText(day, week, year) {
-    var days = week > 0 ? (week - 1) * 7 + day : day;
-    var date = new Date(((year - 1970) * 31536000000) + (days * 24 * 60 * 60 * 1000))
-    return String(date.getDate()).padStart(2, '0') + "." + String(date.getMonth()).padStart(2, '0')
 }
 
 export default WeekDay

@@ -18,8 +18,8 @@ function Page() {
     const [weekDay, setWeekDay] = useState(getWeekDay(today))
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
-    function toggleDay(positive) {
-        if (positive) {
+    function toggleDay(increment) {
+        if (increment) {
             if (weekDay >= 6) {
                 setWeekDay(0)
                 toggleWeek(true)
@@ -43,6 +43,7 @@ function Page() {
     }
 
     function toggleWeek(increment) {
+        console.log(context.year)
         if (increment) {
             if (context.week + 1 >= getWeeksInYear(context.year)) {
                 setContext({ week: 1, year: context.year + 1 })
@@ -64,10 +65,10 @@ function Page() {
                 {isMobile ? (
                     <div className={styles.wrapper}>
                         <div className={styles.titleContainer}><div className={styles.arrow} onClick={e => toggleDay(false)}>{"<"}</div><div className={styles.arrow} onClick={e => toggleDay(true)}>{">"}</div></div>
-                        {isInYear(context.year, context.week, weekDay) ? <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDay} weekDay={weekDay} user={user} today={today.getCurrentWeek() == context.week && weekDay == getWeekDay(today) && context.year == today.getFullYear()} /> : <WeekDay key={"weekDay-" + weekDays.indexOf(weekDay)} weekDay={weekDay} disabled={true} />}
+                        <WeekDay key={"weekDay-" + context.year + "-" + context.week + "-" + weekDay} weekDay={weekDay} user={user} today={today.getCurrentWeek() == context.week && weekDay == getWeekDay(today) && context.year == today.getFullYear()} />
                     </div>
                 ) : weekDays.map(weekDay =>
-                    <WeekDay key={"weekDay-" + "-" + weekDays.indexOf(weekDay)} disabled={!isInYear(context.year, context.week, weekDays.indexOf(weekDay))} weekDay={weekDays.indexOf(weekDay)} today={today.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(today) && context.year == today.getFullYear()} />
+                    <WeekDay key={"weekDay-" + "-" + weekDays.indexOf(weekDay)}weekDay={weekDays.indexOf(weekDay)} today={today.getCurrentWeek() == context.week && weekDays.indexOf(weekDay) == getWeekDay(today) && context.year == today.getFullYear()} />
                 )}
             </div>
         </div>
