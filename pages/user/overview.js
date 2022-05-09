@@ -2,7 +2,7 @@ import { Chart as ChartJS } from 'chart.js/auto'
 import { Doughnut } from 'react-chartjs-2'
 import { useUser } from '../../lib/hooks'
 import { useAppContext } from '../../lib/context'
-import { getWeeksInYear, getTask, getWeeklyTasks, getWeeklyHours, getPercentDifference } from '../../lib/util'
+import { getTask, getWeeklyTasks, getWeeklyHours } from '../../lib/util'
 import CategoryStats from '../../components/overview/categoryStats'
 
 import styles from '../../styles/overview.module.scss'
