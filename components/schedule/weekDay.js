@@ -29,7 +29,7 @@ function WeekDay({ weekDay, today }) {
             }
         }
 
-    }, [user, context])
+    }, [user, context, weekDay])
 
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 

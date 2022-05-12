@@ -149,7 +149,7 @@ function Task({ task }) {
             save()
         else
             setInitial(false)
-    }, [name, color, category])
+    }, [name, color, category, initial, save])
 
     function getIndex() {
         for (var i = 0; i < user.tasks.length; i++) {
@@ -227,7 +227,7 @@ function Category({ category }) {
             save()
         else
             setInitial(false)
-    }, [name])
+    }, [name, initial, save])
 
     async function save() {
         var categoryIndex
@@ -301,7 +301,7 @@ function Rating({ rating }) {
             save()
         else
             setInitial(false)
-    }, [name])
+    }, [name, initial, save])
 
     async function save() {
         var ratingIndex
