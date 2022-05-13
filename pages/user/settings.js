@@ -149,7 +149,9 @@ function Task({ task }) {
             save()
         else
             setInitial(false)
-    }, [name, color, category, initial, save])
+
+        console.log("a")
+    }, [name])
 
     function getIndex() {
         for (var i = 0; i < user.tasks.length; i++) {
@@ -182,8 +184,6 @@ function Task({ task }) {
         for (var dayIndex in user.days) {
             user.days[dayIndex].tasks = user.days[dayIndex].tasks.filter(dayTask => dayTask.taskId != task.id)
         }
-
-        console.log("and now we dissapear")
 
         await fetch(window.origin + "/api/days", {
             body: JSON.stringify({
@@ -227,7 +227,7 @@ function Category({ category }) {
             save()
         else
             setInitial(false)
-    }, [name, initial, save])
+    }, [name])
 
     async function save() {
         var categoryIndex
@@ -301,7 +301,7 @@ function Rating({ rating }) {
             save()
         else
             setInitial(false)
-    }, [name, initial, save])
+    }, [name])
 
     async function save() {
         var ratingIndex
