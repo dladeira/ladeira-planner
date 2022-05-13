@@ -151,7 +151,7 @@ function Task({ task }) {
             setInitial(false)
 
         console.log("a")
-    }, [name])
+    }, [name, color, category])
 
     function getIndex() {
         for (var i = 0; i < user.tasks.length; i++) {
