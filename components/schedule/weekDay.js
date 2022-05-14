@@ -62,7 +62,7 @@ function WeekDay({ weekDay, today }) {
                 </div>
             </div>
 
-            {isMobile || weekDay == 0 ? <RatingHeader user={user} weekDay={weekDay} /> : <div />}
+            {isMobile || weekDay == 0 ? <RatingHeader weekDay={weekDay} /> : <div />}
             <Ratings user={user} weekDay={weekDay} />
         </div>
     ) : <div />)

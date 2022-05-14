@@ -1,34 +1,41 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react/cjs/react.production.min'
 import { useAppContext } from '../../lib/context'
 import { getDay } from '../../lib/util'
+import { useUser } from '../../lib/hooks'
 
 import styles from './ratings.module.scss'
 
-export default function Ratings({ user, weekDay }) {
+export default function Ratings({ weekDay }) {
     const [context] = useAppContext()
+    const [user] = useUser({ userOnly: true })
 
     return (
         <div className={styles.ratings}>
             {user.ratings.map(rating =>
-                <Rating key={weekDay + "-" + rating.id} rating={rating} user={user} day={getDay(user, weekDay, context.week, context.year)} selectedData={{ day: weekDay, week: context.week, year: context.year }} />
+                <Rating key={`${context.year}-${context.week}-${weekDay}-${rating.id}`} rating={rating} day={getDay(user, weekDay, context.week, context.year)} selectedData={{ day: weekDay, week: context.week, year: context.year }} />
             )}
         </div>
     )
 }
 
-export function RatingHeader({ user, weekDay }) {
+export function RatingHeader({ weekDay }) {
+    const [context] = useAppContext()
+    const [user] = useUser({ userOnly: true })
+
     return (
         <div className={styles.headerWrapper}>
             <div className={styles.headerContainer}>
-                {user.ratings.map(rating => <div key={weekDay + "-" + rating.name[0]} className={styles.header}>{rating.name[0]}</div>)}
+                {user.ratings.map(rating => <div key={`header-${weekDay}-${rating.name[0]}`} className={styles.header}>{rating.name[0]}</div>)}
             </div>
         </div>
 
     )
 }
 
-function Rating({ rating, user, day, selectedData }) {
+function Rating({ rating, day, selectedData }) {
     const [ratingCount, setRatingCount] = useState(getDefaultRating())
+    const [user] = useUser({ userOnly: true })
 
     function setRating(newRating) {
         if (newRating == ratingCount) // Reset rating

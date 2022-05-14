@@ -11,8 +11,6 @@ export default function Document() {
 
                 {/* Icons */}
                 <script src="https://kit.fontawesome.com/fc8fb46941.js" async={true} crossOrigin="anonymous" />
-
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <body>
                 <Main />

@@ -1,4 +1,5 @@
 import Layout from '../components/layout'
+import Head from 'next/head'
 import { AppWrapper } from '../lib/context'
 
 import '../styles/global.scss'
@@ -6,11 +7,16 @@ import '../styles/global.scss'
 export default function App({ Component, pageProps }) {
 
     return (
-        <AppWrapper>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
-        </AppWrapper>
+        <>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <AppWrapper>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </AppWrapper>
+        </>
     )
 }
 
